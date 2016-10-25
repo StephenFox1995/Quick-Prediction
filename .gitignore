@@ -2,3 +2,4 @@ swarm/
 .vscode/
 *.pyc
 .DS_Store
+sources/
