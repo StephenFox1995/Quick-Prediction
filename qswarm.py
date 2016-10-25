@@ -10,14 +10,13 @@ class QSwarm(object):
   SWARM_WORK_DIR_NAME = "swarm"
   INIT_FILE_NAME = "__init__.py"
 
-  def __init__(self, csvFile, swarmDescription):
+  def __init__(self, swarmDescription):
     """
       Initiliases a new instance.
 
       @param csvFile: (string) The csv file to read the data from, which is used to generate the swarm data.
       @param swarmDescription: (string) A description of the swarm.
     """
-    self._csvFile = csvFile
     self._swarmDescription = swarmDescription
 
   
@@ -28,7 +27,7 @@ class QSwarm(object):
     @param name: (string) The name to call the swarm.
     """
     self._SWARM_NAME = name
-    self.__swarm(self._csvFile)
+    self.__swarm()
 
     
   def __writeModelParams(self, modelParams):
@@ -39,7 +38,6 @@ class QSwarm(object):
     if not os.path.isdir(outDir):
       os.mkdir(outDir)
     # Create the /stream/__init__.py file
-    print os.path.join(outDir, QSwarm.INIT_FILE_NAME)
     open(os.path.join(outDir, QSwarm.INIT_FILE_NAME), 'a').close()
 
     paramsOutPath = os.path.join(outDir, swarmModelParamsPyFile)
@@ -68,15 +66,16 @@ class QSwarm(object):
     return swarmWorkDir
   
   
-  def __swarm(self, inputFile):
+  def __swarm(self):
     # Create directory for swarm details
     swarmWorkDir = self.__createSwarmWorkDir()
     modelParams = permutations_runner.runWithConfig(
         self._swarmDescription,
         {"maxWorkers": 2, "overwrite": True},
-        outputLabel="rec_center",
+        outputLabel=self._SWARM_NAME,
         outDir=swarmWorkDir,
         permWorkDir=swarmWorkDir
     )
     # Write the model parameters to swarm directory.
     self.__writeModelParams(modelParams)
+

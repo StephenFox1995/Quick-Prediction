@@ -36,7 +36,7 @@ SWARM_DESCRIPTION = {
     "streams": [
       {
         "info": "purchases",
-        "source": "file://purchases_hourly.csv",
+        "source": "file://sources/purchases_hourly.csv",
         "columns": [
           "*"
         ]
