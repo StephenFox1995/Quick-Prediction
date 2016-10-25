@@ -7,7 +7,7 @@ import datetime
 
 DATE_TIME_FORMAT = "%m/%d/%Y %H:%M"
 CSV_FILE = "sources/purchases_hourly.csv"
-MODEL_NAME = "puchases"
+MODEL_NAME = "purchases"
 
 def rowsToParse(row):
   timestamp = datetime.datetime.strptime(row[0], DATE_TIME_FORMAT)
@@ -31,7 +31,3 @@ if __name__ == "__main__":
     qrunner.runModel("purchases", CSV_FILE, 3, rowsToParse)
   except ImportError:
     print("Error trying to run model. swarm_model_params file could not be found.")
-  
-
-
-

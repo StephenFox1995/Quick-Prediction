@@ -22,9 +22,6 @@ class QOutput(object):
   def close(self):
     self.outputFile.close()
     print("Done, Wrote %i data lines to %s" % (self.lineCount, self.filename))
-
-        
-   
   
 
   
