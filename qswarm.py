@@ -63,6 +63,7 @@ class QSwarm(object):
     swarmWorkDir = os.path.abspath(QSwarm.SWARM_WORK_DIR_NAME)
     if not os.path.exists(swarmWorkDir): 
       os.mkdir(swarmWorkDir)
+      open(os.path.join(swarmWorkDir, QSwarm.INIT_FILE_NAME), 'a').close()
     return swarmWorkDir
   
   
