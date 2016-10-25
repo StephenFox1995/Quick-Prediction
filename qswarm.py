@@ -3,7 +3,6 @@ import os
 import pprint
 
 
-
 class QSwarm(object):
   
   # Name of the directory for the swarm data.
@@ -23,7 +22,6 @@ class QSwarm(object):
   def start(self, name="unnamed"):
     """
     Starts a new swarm.
-
     @param name: (string) The name to call the swarm.
     """
     self.SWARM_NAME = name
@@ -31,7 +29,11 @@ class QSwarm(object):
 
     
   def __writeModelParams(self, modelParams):
-    swarmModelParamsDir= os.path.join(QSwarm.SWARM_WORK_DIR_NAME, self.SWARM_NAME + "_model_params") 
+    """
+    Writes the model_params to directory.
+    @param modelParams: (dict) Model Parameters generated from swarm.
+    """
+    swarmModelParamsDir = os.path.join(QSwarm.SWARM_WORK_DIR_NAME, self.SWARM_NAME + "_model_params") 
     swarmModelParamsPyFile = self.SWARM_NAME + "_model_params.py"
     
     outDir = os.path.join(os.getcwd(), swarmModelParamsDir)
@@ -47,19 +49,12 @@ class QSwarm(object):
     with open(paramsOutPath, "wb") as outFile:
         modelParamsString = pp.pformat(modelParams)
         outFile.write("MODEL_PARAMS = \\\n%s" % modelParamsString)
-    return paramsOutPath
-
-
-  def __swarm(self, name, inputFile):
-    swarmWorkDir = os.path.abspath(QSwarm.SWARM_WORK_DIR_NAME)
-    # Create directory for the swarm details
-    if not os.path.exists(swarmWorkDir):
-      os.mkdir(swarmWorkDir)
-    modelParams = modelParams(swarmWorkDir, SWARM_DESCRIPTION)
-    writeModelParams(modelParams)
   
 
   def __createSwarmWorkDir(self):
+    """
+    Creates the swarm/ directory, which stores all generated files from the swarm
+    """
     swarmWorkDir = os.path.abspath(QSwarm.SWARM_WORK_DIR_NAME)
     if not os.path.exists(swarmWorkDir): 
       os.mkdir(swarmWorkDir)
@@ -69,6 +64,9 @@ class QSwarm(object):
   
   
   def __swarm(self):
+    """
+    Starts a swarm and writes a generated files to swarm/ directory. 
+    """
     # Create directory for swarm details
     swarmWorkDir = self.__createSwarmWorkDir()
     modelParams = permutations_runner.runWithConfig(

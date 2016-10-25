@@ -1,5 +1,4 @@
 from nupic.frameworks.opf.modelfactory import ModelFactory
-
 import csv
 import datetime
 from qoutput import QOutput 
@@ -43,7 +42,8 @@ class QRunner(object):
     headers.append("prediction")
 
     output = QOutput(runOutputFile, headers)
-
+    
+    # Set the position to start reading the csv file.
     for i in range(0, skiprows - 1):
       csvReader.next()
 
@@ -60,7 +60,6 @@ class QRunner(object):
       row.append(prediction)
       output.write(row)
 
-      
     inputFile.close()
     output.close()
     
