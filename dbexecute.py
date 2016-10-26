@@ -9,8 +9,8 @@ import time
 # current date  -3 months, do each quarter.
 
 DATE_TIME_FORMAT = "%d/%m/%Y %H:%M"
-DATE_FORMAT = "%d/%m/%Y"
-HOUR_FORMAT = "%H"
+
+
 
 def extractTime(previous, current):
   previous.append(current["createdAt"])
@@ -21,6 +21,41 @@ def currentDate():
 
 def threeMonthsAgo():
   return datetime.today() + relativedelta(months=-3)
+
+
+def getOrdersForDay(day, orders):
+  """
+  Get amount of orders for a day. This function calculates this
+  by checking if there is two objects in the array with the same
+  date. If the objects have the same date, then they are assumed
+  to be an order for that day, thus get added to the array.
+  """
+  def filterDays(dayToCompare):
+    DATE_FORMAT = "%d/%m/%Y"
+    dateOne = datetime.strftime(day, DATE_FORMAT)
+    dateTwo = datetime.strftime(dayToCompare, DATE_FORMAT)  
+    if dateOne == dateTwo:
+      return dateTwo
+  filtered = filter(filterDays, orders)
+  return filtered 
+
+
+def getOrdersForHour(hour, orders):
+  """
+  Returns all orders for a given hour within a dataset.
+  Note if there are many days within the dataset then this function
+  will return all occurences of that hour for all days.
+  @param hour: () The hour to filter the dataset by.
+  @param orders: (array) The dataset of orders.
+  """
+  def filterHours(hourToCompare):
+    HOUR_FORMAT = "%H"
+    hourOne = datetime.strftime(hour, HOUR_FORMAT)
+    hourTwo = datetime.strftime(hourToCompare, HOUR_FORMAT)
+    if hourOne == hourTwo:
+      return hourTwo
+  filtered = filter(filterHours, orders)
+  return filtered
 
 
 database = Database()
@@ -39,35 +74,6 @@ for order in orders:
 
 # Get all timestamps
 orderTimeStamps = reduce(extractTime, ordersArray, [])
-
-
-
-def getOrdersForDay(day, orders):
-  """
-  Get amount of orders for a day. This function calculates this
-  by checking if there is two objects in the array with the same
-  date. If the objects have the same date, then they are assumed
-  to be an order for that day, thus get added to the array.
-  """
-  def filterDays(dayToCompare):
-    dateOne = datetime.strftime(day, DATE_FORMAT)
-    dateTwo = datetime.strftime(dayToCompare, DATE_FORMAT)  
-    if dateOne == dateTwo:
-      return dateTwo
-  filtered = filter(filterDays, orders)
-  return filtered 
-
-
-def getOrdersForHour(hour, orders):
-  def filterHours(hourToCompare):
-    hourOne = datetime.strftime(hour, HOUR_FORMAT)
-    hourTwo = datetime.strftime(hourToCompare, HOUR_FORMAT)
-    if hourOne == hourTwo:
-      return hourTwo
-  filtered = filter(filterHours, orders)
-  return filtered
-     
-
 
 ordersForDay = getOrdersForDay(orderTimeStamps[34], orderTimeStamps)
 
