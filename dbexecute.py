@@ -101,8 +101,8 @@ def getDateTimesFromMongoOrderData(orders):
   # Get all timestamps from mongo
   return  map(extractTime, orders)
 
-def zeroFillOrdersForFullDay():
-   return map(lambda c: {c: 0}, hours)
+def zeroFillOrdersForFullDay(date):
+  return map(lambda hour: {"hour": datetime.combine(date, datetime.time(hour)), "amount": 0}, hours)
   
 
 
@@ -122,7 +122,6 @@ orderDetailsForThreeMonths = []
 # Loop through array of dates from previous three months
 # check the amount of orders per hour and add to dict.
 for date in threeMonthDateRange:
-  print("date: %s" % (datetime.strftime(date, "%d/%m/%Y")))
   orderDetails = {
     "date": object,
     "orders": []
@@ -132,7 +131,7 @@ for date in threeMonthDateRange:
   ordersForDate = getOrdersForDate(date, orderDates)
   # if the order amount for that date is zero then just fill all hours with a order count of 0
   if len(ordersForDate) == 0:
-    orderDetails["orders"] = zeroFillOrdersForFullDay()
+    orderDetails["orders"] = zeroFillOrdersForFullDay(date)
     orderDetailsForThreeMonths.append(orderDetails)
     continue
   
@@ -144,16 +143,29 @@ for date in threeMonthDateRange:
     # Combine the current hour iteration with the current date iteration 
     hour = datetime.combine(date, datetime.time(hour))
     if ordersAmountForHour == 0:
-      ordersForHour = {hour: 0}
-      orderDetails["orders"].append(ordersForHour) 
+      info = {
+        "hour": hour,
+        "amount": 0
+      }
+      orderDetails["orders"].append(info) 
     else:
-      ordersForHour = {hour: ordersAmountForHour}
-      orderDetails["orders"].append(ordersForHour)
+      info = {
+        "hour": hour,
+        "amount": ordersAmountForHour
+      }
+      orderDetails["orders"].append(info)
   orderDetailsForThreeMonths.append(orderDetails)
       
-print "p"
 
 # Build up rows for .csv file
-# output = QOutput("previous_three_months", ["timestamp"])
+output = QOutput("previous_three_months", ["timestamp", "orders"])
 
+for date in orderDetailsForThreeMonths:
+  for order in date['orders']:
+    if order["amount"] > 0:
+      print "gottem"
+    output.write([order["hour"], order["amount"]])
+
+
+output.close()
 
