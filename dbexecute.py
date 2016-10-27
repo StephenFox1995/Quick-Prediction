@@ -157,13 +157,12 @@ for date in threeMonthDateRange:
   orderDetailsForThreeMonths.append(orderDetails)
       
 
-# Build up rows for .csv file
+# Get ready to write to .csv file
 output = QOutput("previous_three_months", ["timestamp", "orders"])
 
+# Write all data to .csv
 for date in orderDetailsForThreeMonths:
   for order in date['orders']:
-    if order["amount"] > 0:
-      print "gottem"
     output.write([order["hour"], order["amount"]])
 
 
