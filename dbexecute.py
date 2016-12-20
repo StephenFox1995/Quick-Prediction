@@ -3,7 +3,7 @@ from bson.objectid import ObjectId
 from qoutput import QOutput
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-
+import os
 
 
 # current date  -3 months, do each quarter.
@@ -87,14 +87,6 @@ def getOrdersForHour(hour, orders):
   return filter(filterHours, orders)
 
 
-def getAllUniqueDates(dates):
-  DATE_FORMAT = "%d/%m/%Y"
-  
-  return map(lambda c: datetime.strptime(c, DATE_FORMAT), \
-    reduce(lambda l, x: l.append(datetime.strftime(x, DATE_FORMAT))  
-      or l if datetime.strftime(x, DATE_FORMAT) not in l else l, dates, []))
-
-
 def getDateTimesFromMongoOrderData(orders):
   def extractTime(current):
     return current["createdAt"]
@@ -105,66 +97,66 @@ def zeroFillOrdersForFullDay(date):
   return map(lambda hour: {"hour": datetime.combine(date, datetime.time(hour)), "amount": 0}, hours)
   
 
+if __name__ == "__main__":
+  database = Database()
+  db = database.getDB()
 
-database = Database()
-db = database.getDB()
+  # Get the orders from the database
+  orders = db.orders.find({"createdAt": {"$gte": threeMonthsAgo()}})
+  # Get all date times from orders
+  orderDates = getDateTimesFromMongoOrderData(orders)
+  # Get every date between today and three months ago.
+  threeMonthDateRange = dateRange(threeMonthsAgo(), datetime.today(), 1, 'days')
 
-# Get the orders from the database
-orders = db.orders.find({"createdAt": {"$gte": threeMonthsAgo()}})
-# Get all date times from orders
-orderDates = getDateTimesFromMongoOrderData(orders)
-# Get every date between today and three months ago.
-threeMonthDateRange = dateRange(threeMonthsAgo(), datetime.today(), 1, 'days')
+  # All the details about orders for the previous three months.
+  orderDetailsForThreeMonths = []
 
-# All the details about orders for the previous three months.
-orderDetailsForThreeMonths = []
+  # Loop through array of dates from previous three months
+  # check the amount of orders per hour and add to dict.
+  for date in threeMonthDateRange:
+    orderDetails = {
+      "date": object,
+      "orders": []
+    }
+    orderDetails["date"] = date
 
-# Loop through array of dates from previous three months
-# check the amount of orders per hour and add to dict.
-for date in threeMonthDateRange:
-  orderDetails = {
-    "date": object,
-    "orders": []
-  }
-  orderDetails["date"] = date
-
-  ordersForDate = getOrdersForDate(date, orderDates)
-  # if the order amount for that date is zero then just fill all hours with a order count of 0
-  if len(ordersForDate) == 0:
-    orderDetails["orders"] = zeroFillOrdersForFullDay(date)
-    orderDetailsForThreeMonths.append(orderDetails)
-    continue
+    ordersForDate = getOrdersForDate(date, orderDates)
+    # if the order amount for that date is zero then just fill all hours with a order count of 0
+    if len(ordersForDate) == 0:
+      orderDetails["orders"] = zeroFillOrdersForFullDay(date)
+      orderDetailsForThreeMonths.append(orderDetails)
+      continue
   
   
-  # If there was orders for that date get orders for each hour
-  for hour in hours:
-    ordersAmountForHour = len(getOrdersForHour(hour, ordersForDate))
-    # As each hour only contains XX:XX, it doesn't have a date.
-    # Combine the current hour iteration with the current date iteration 
-    hour = datetime.combine(date, datetime.time(hour))
-    if ordersAmountForHour == 0:
-      info = {
-        "hour": hour,
-        "amount": 0
-      }
-      orderDetails["orders"].append(info) 
-    else:
-      info = {
-        "hour": hour,
-        "amount": ordersAmountForHour
-      }
-      orderDetails["orders"].append(info)
+    # If there was orders for that date get orders for each hour
+    for hour in hours:
+      ordersAmountForHour = len(getOrdersForHour(hour, ordersForDate))
+      # As each hour only contains XX:XX, it doesn't have a date.
+      # Combine the current hour iteration with the current date iteration 
+      hour = datetime.combine(date, datetime.time(hour))
+      if ordersAmountForHour == 0:
+        info = {
+          "hour": hour,
+          "amount": 0
+        }
+        orderDetails["orders"].append(info) 
+      else:
+        info = {
+          "hour": hour,
+          "amount": ordersAmountForHour
+        }
+        orderDetails["orders"].append(info)
   orderDetailsForThreeMonths.append(orderDetails)
       
 
-# Get ready to write to .csv file
-output = QOutput("previous_three_months", ["timestamp", "orders"])
+  # Get ready to write to .csv file
+  dirPath = os.path.dirname(os.path.realpath(__file__))
+  output = QOutput(dirPath + "/sources/previous_three_months", ["timestamp", "orders"])
 
-# Write all data to .csv
-for date in orderDetailsForThreeMonths:
-  for order in date['orders']:
-    output.write([order["hour"], order["amount"]])
+  # Write all data to .csv
+  for date in orderDetailsForThreeMonths:
+    for order in date['orders']:
+      output.write([order["hour"], order["amount"]])
 
-
-output.close()
+  output.close()
 

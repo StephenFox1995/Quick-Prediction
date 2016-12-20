@@ -5,29 +5,29 @@ from sources.swarm_description import SWARM_DESCRIPTION
 import os
 import datetime
 
-DATE_TIME_FORMAT = "%m/%d/%Y %H:%M"
-CSV_FILE = "sources/purchases_hourly.csv"
-MODEL_NAME = "purchases"
+DATE_TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+CSV_FILE = "sources/previous_three_months_out.csv"
+MODEL_NAME = "orders"
 
 def rowsToParse(row):
   timestamp = datetime.datetime.strptime(row[0], DATE_TIME_FORMAT)
   purchase = int(row[1])
   return {
     "timestamp": timestamp,
-    "purchases": purchase
+    "orders": purchase
   }
 
 
 
 if __name__ == "__main__":
   qswarm = QSwarm(SWARM_DESCRIPTION)
-  qswarm.start("purchases_swarm")
+  qswarm.start("orders_swarm")
   
   try: 
-    from swarm.purchases_swarm_model_params import purchases_swarm_model_params
+    from swarm.orders_swarm_model_params import orders_swarm_model_params
     qrunner = QRunner()
-    qrunner.createModel(purchases_swarm_model_params.MODEL_PARAMS, "purchases")
+    qrunner.createModel(orders_swarm_model_params.MODEL_PARAMS, "orders")
     inputFilePath = os.path.abspath("swarm")
-    qrunner.runModel("purchases", CSV_FILE, 3, rowsToParse)
+    qrunner.runModel("orders", CSV_FILE, 3, rowsToParse)
   except ImportError:
     print("Error trying to run model. swarm_model_params file could not be found.")
