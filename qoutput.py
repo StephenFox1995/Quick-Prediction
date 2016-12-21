@@ -12,8 +12,7 @@ class QOutput(object):
     print("Preparing to output data to %s" % (self.filename))
     # first write the headers to the file
     self.outputWriter = csv.writer(self.outputFile)
-    self.outputWriter.writerow(headers)
-
+    self.outputWriter.writerows(headers)
 
   def write(self, row):
     self.outputWriter.writerow(row)

@@ -151,7 +151,7 @@ if __name__ == "__main__":
 
   # Get ready to write to .csv file
   dirPath = os.path.dirname(os.path.realpath(__file__))
-  output = QOutput(dirPath + "/sources/previous_three_months", ["timestamp", "orders"])
+  output = QOutput(dirPath + "/sources/previous_three_months", [["timestamp", "orders"], ["datetime", "int"], ["T", " "]])
 
   # Write all data to .csv
   for date in orderDetailsForThreeMonths:
