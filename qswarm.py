@@ -3,6 +3,7 @@ import pprint
 from enum import Enum
 from nupic.swarming import permutations_runner
 import json
+import consts
 
 
 class QSwarm(object):
@@ -11,38 +12,41 @@ class QSwarm(object):
   INIT_FILE_NAME = "__init__.py"
 
   def __init__(self, swarmType, businessDir, businessID):
-    self.__swarmDescriptionObject = self.getSwarmDescObject(swarmType)
+    self._swarmDescriptionObject = self.__getSwarmDescObject(swarmType)
     self._businessID = businessID
     self._businessDir = businessDir
-    self.__newSwarmDescription(self.__swarmDescriptionObject, businessDir)
+    self._swarmType = swarmType
+    self.__newSwarmDescription(self._swarmDescriptionObject, businessDir)
     
 
   def __newSwarmDescription(self, swarmDescTemplate, businessDir):
     """
     Creates a new swarm_description file for the business if one does
     not already exist.
-    @param swarmDescTemplate:(object) A JSON representation of the template to 
+    @param swarmDescObject:(object) A JSON representation of the template to 
                                       use for the swarm_description
     @param businessDir:(string) Root directory for the business.
     """
-
     print("Checking if a swarm_description.json exists...")
     # Check is businessDir/sources exists    
     sourcesLocation = businessDir + "/sources"
     swarmDescriptionFile = sourcesLocation + "/swarm_description.json"
+    self._swarmDescriptionFile = swarmDescriptionFile
     if not os.path.exists(sourcesLocation):
       print("Creating swarm_description.json file...")
       os.makedirs(sourcesLocation)
     
     if not os.path.exists(swarmDescriptionFile):
       print("Writing params to swarm_description.json file")
-      self.__swarmDescriptionObject["streamDef"]["streams"][0]["source"] = self.__streamSourceFormat(self._businessID, "data.csv")
-      swarmDescJSONString = json.dumps(self.__swarmDescriptionObject, indent=2)
+      self._swarmDescriptionObject["streamDef"]["streams"][0]["source"] = self.__streamSourceFormat(self._businessID)
+      swarmDescJSONString = json.dumps(self._swarmDescriptionObject, indent=2)
+
       # Swarm description must be assigned to a property.
       with open(swarmDescriptionFile, "w") as f:
         swarmDescription = swarmDescJSONString
         f.write(swarmDescription)
         print("Params successfully written to swarm_description.json file")
+        
     else:
       print("swarm_description.json file already exists")
       with open(swarmDescriptionFile, 'r') as f:
@@ -50,9 +54,15 @@ class QSwarm(object):
         self._swarmDescriptionObject = json.loads(swarmDescription)
 
 
-  def __streamSourceFormat(self, businessID, sourceFilename):
-    # Example format: "file://sources/orders.csv",
-    return "file://" + businessID + "/sources/" + sourceFilename
+
+  def __streamSourceFormat(self, businessID):
+    # Example format: "file://sources/data/orders.csv"
+    if self._swarmType == QSwarm.SwarmType.OrderAmount:
+      return "file://%s/sources/data%s" % (businessID, consts.ORDER_AMOUNT_FILE_NAME)
+    else:
+      return "" # Todo any other swarm types.
+      
+
 
 
   def start(self, name="unnamed"):
@@ -118,13 +128,13 @@ class QSwarm(object):
   
   
   
-  def getSwarmDescObject(self, swarmType):
-    # Get the swarm desc template for appropriate swarm.
+  def __getSwarmDescObject(self, swarmType):
+    # Get the swarm desc Object for appropriate swarm.
     currentDir = os.path.dirname(os.path.realpath(__file__))
-    swarmDescTemplate = currentDir + "/swarm_desc_templates"
+    swarmDescObject = currentDir + "/swarm_desc_templates"
     if swarmType == QSwarm.SwarmType.OrderAmount:
       if swarmType == QSwarm.SwarmType.OrderAmount:
-        swarmDescTemplate += "/order_amount_template.json"
-        with open(swarmDescTemplate) as swarmDesc:
+        swarmDescObject += "/order_amount_template.json"
+        with open(swarmDescObject) as swarmDesc:
           data = json.load(swarmDesc)
           return data

@@ -3,30 +3,28 @@ import os
 
 # Util class for managing file and directory functionality.
 class QOutput(object):
-  def __init__(self):
-    pass
 
-  def __init__(self, file, headers):
-    self.filename = file
-    self.headers = headers
-    self.lineCount = 0
+  def __init__(self, file):
+    self._filename = file
+    self._headers = []
+    self._lineCount = 0
+    self._outputFile = open(self._filename, 'w+')
+    self._headersWritten = False
+    self._outputWriter = csv.writer(self._outputFile)
+    print("Preparing to output data to %s" % (self._filename))
     
-    self.filename = "%s_out.csv" % self.filename
-    self.outputFile = open(self.filename, 'w')
-    print("Preparing to output data to %s" % (self.filename))
-    # first write the headers to the file
-    self.outputWriter = csv.writer(self.outputFile)
-    self.outputWriter.writerows(headers)
+    
+  def writeHeader(self, header):
+    self._outputWriter.writerow(header)
 
   def write(self, row):
-    self.outputWriter.writerow(row)
-    self.lineCount += 1
+    self._outputWriter.writerow(row)
+    self._lineCount += 1
 
   def close(self):
-    self.outputFile.close()
-    print("Done, Wrote %i data lines to %s" % (self.lineCount, self.filename))
+    self._outputFile.close()
+    print("Done, Wrote %i data lines to %s" % (self._lineCount, self._filename))
   
-
   @staticmethod
   def rootDirForBusiness(id, make=False):
     """
