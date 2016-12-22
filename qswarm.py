@@ -11,27 +11,45 @@ class QSwarm(object):
   INIT_FILE_NAME = "__init__.py"
 
   def __init__(self, swarmType, businessDir, businessID):
-    self._swarmDescriptionTemplate = self.getSwarmDescTemplate(swarmType)
+    self.__swarmDescriptionObject = self.getSwarmDescObject(swarmType)
     self._businessID = businessID
     self._businessDir = businessDir
-    self.__newSwarmDescription(self._swarmDescriptionTemplate, businessDir)
+    self.__newSwarmDescription(self.__swarmDescriptionObject, businessDir)
     
 
   def __newSwarmDescription(self, swarmDescTemplate, businessDir):
+    """
+    Creates a new swarm_description file for the business if one does
+    not already exist.
+    @param swarmDescTemplate:(object) A JSON representation of the template to 
+                                      use for the swarm_description
+    @param businessDir:(string) Root directory for the business.
+    """
+
+    print("Checking if a swarm_description.json exists...")
     # Check is businessDir/sources exists    
     sourcesLocation = businessDir + "/sources"
-    swarmDescriptionFile = sourcesLocation + "/swarm_description.py"
+    swarmDescriptionFile = sourcesLocation + "/swarm_description.json"
     if not os.path.exists(sourcesLocation):
+      print("Creating swarm_description.json file...")
       os.makedirs(sourcesLocation)
     
     if not os.path.exists(swarmDescriptionFile):
-      self._swarmDescriptionTemplate["streamDef"]["streams"][0]["source"] = self.__streamSourceFormat(self._businessID, "data.csv")
-      swarmContents = json.dumps(self._swarmDescriptionTemplate)
+      print("Writing params to swarm_description.json file")
+      self.__swarmDescriptionObject["streamDef"]["streams"][0]["source"] = self.__streamSourceFormat(self._businessID, "data.csv")
+      swarmDescJSONString = json.dumps(self.__swarmDescriptionObject, indent=2)
       # Swarm description must be assigned to a property.
-      swarmContents = "SWARM_DESCRIPTION =" + swarmContents 
       with open(swarmDescriptionFile, "w") as f:
-        f.write(swarmContents)
-      
+        swarmDescription = swarmDescJSONString
+        f.write(swarmDescription)
+        print("Params successfully written to swarm_description.json file")
+    else:
+      print("swarm_description.json file already exists")
+      with open(swarmDescriptionFile, 'r') as f:
+        swarmDescription = f.read()
+        self._swarmDescriptionObject = json.loads(swarmDescription)
+
+
   def __streamSourceFormat(self, businessID, sourceFilename):
     # Example format: "file://sources/orders.csv",
     return "file://" + businessID + "/sources/" + sourceFilename
@@ -43,9 +61,9 @@ class QSwarm(object):
     @param swarmDir: (string) The directory for the swarm data.
     @param name: (string) The name to call the swarm.
     """
-
     self.SWARM_NAME = name
     self.__swarm()
+
 
   def __writeModelParams(self, modelParams):
     """
@@ -89,7 +107,7 @@ class QSwarm(object):
     # Create directory for swarm details
     swarmWorkDir = self.__createSwarmWorkDir()
     modelParams = permutations_runner.runWithConfig(
-        self.swarmDescription,
+        self._swarmDescriptionObject,
         {"maxWorkers": 2, "overwrite": True},
         outputLabel=self.SWARM_NAME,
         outDir=swarmWorkDir,
@@ -100,7 +118,7 @@ class QSwarm(object):
   
   
   
-  def getSwarmDescTemplate(self, swarmType):
+  def getSwarmDescObject(self, swarmType):
     # Get the swarm desc template for appropriate swarm.
     currentDir = os.path.dirname(os.path.realpath(__file__))
     swarmDescTemplate = currentDir + "/swarm_desc_templates"

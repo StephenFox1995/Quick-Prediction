@@ -23,8 +23,7 @@ if __name__ == "__main__":
   
   businessID = "1234"
   predict = Predict(businessID, QSwarm.SwarmType.OrderAmount)
-  
-  
+  predict.begin(hourlyOrders)
 
 
 
