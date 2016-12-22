@@ -1,13 +1,17 @@
-from nupic.swarming import permutations_runner
 import os
 import pprint
+from enum import Enum
+from nupic.swarming import permutations_runner
+import json
 
 
 class QSwarm(object):
-  
-  # Name of the directory for the swarm data.
-  SWARM_WORK_DIR_NAME = "swarm"
+  SwarmType = Enum(["OrderAmount"])
+  SWARM_WORK_DIR_NAME = "swarm" # Name of the directory for the swarm data.
   INIT_FILE_NAME = "__init__.py"
+
+  def __init__(self):
+    pass
 
   def __init__(self, swarmDescription):
     """
@@ -78,4 +82,16 @@ class QSwarm(object):
     )
     # Write the model parameters to swarm directory.
     self.__writeModelParams(modelParams)
-
+  
+  
+  
+  def getSwarmDescTemplate(self, swarmType):
+    # Get the swarm desc template for appropriate swarm.
+    currentDir = os.path.dirname(os.path.realpath(__file__))
+    swarmDescTemplate = currentDir + "/swarm_desc_templates"
+    if swarmType == QSwarm.SwarmType.OrderAmount:
+      if swarmType == QSwarm.SwarmType.OrderAmount:
+        swarmDescTemplate += "/order_amount_template.json"
+        with open(swarmDescTemplate) as swarmDesc:
+          data = json.load(swarmDesc)
+          return data
