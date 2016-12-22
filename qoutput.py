@@ -1,7 +1,11 @@
 import csv
+import os
 
+# Util class for managing file and directory functionality.
 class QOutput(object):
-  
+  def __init__(self):
+    pass
+
   def __init__(self, file, headers):
     self.filename = file
     self.headers = headers
@@ -18,11 +22,20 @@ class QOutput(object):
     self.outputWriter.writerow(row)
     self.lineCount += 1
 
-  
   def close(self):
     self.outputFile.close()
     print("Done, Wrote %i data lines to %s" % (self.lineCount, self.filename))
   
+  # Create a new directory for a business for prediction data
+  # if it does not already exist.
+  @staticmethod
+  def dirForBusiness(id, make=False):
+    # Get current location.
+    dirPath = os.path.dirname(os.path.realpath(__file__))
+    businessDir = dirPath + "/" + id
+    if not os.path.exists(businessDir) and make == True:
+      os.makedirs(businessDir)
+    return businessDir
 
   
 

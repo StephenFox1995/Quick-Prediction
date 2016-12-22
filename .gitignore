@@ -3,3 +3,4 @@ swarm/
 *.pyc
 .DS_Store
 sources/
+predictions/
