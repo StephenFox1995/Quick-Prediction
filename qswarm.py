@@ -8,9 +8,8 @@ import consts
 
 class QSwarm(object):
   SwarmType = Enum(["OrderAmount"])
-  SWARM_WORK_DIR_NAME = "swarm" # Name of the directory for the swarm data.
   INIT_FILE_NAME = "__init__.py"
-
+  SWARM_WORK_DIR_NAME = "swarm"
   def __init__(self, swarmType, businessDir, businessID):
     self._swarmDescriptionObject = self.__getSwarmDescObject(swarmType)
     self._businessID = businessID
@@ -80,16 +79,15 @@ class QSwarm(object):
     Writes the model_params to directory.
     @param modelParams: (dict) Model Parameters generated from swarm.
     """
-    swarmModelParamsDir = os.path.join(QSwarm.SWARM_WORK_DIR_NAME, self.SWARM_NAME + "_model_params") 
+    swarmModelParamsDir = os.path.join(self._businessDir, QSwarm.SWARM_WORK_DIR_NAME, self.SWARM_NAME + "_model_params")
     swarmModelParamsPyFile = self.SWARM_NAME + "_model_params.py"
     
-    outDir = os.path.join(os.getcwd(), swarmModelParamsDir)
-    if not os.path.isdir(outDir):
-      os.mkdir(outDir)
+    if not os.path.isdir(swarmModelParamsDir):
+      os.makedirs(swarmModelParamsDir)
     # Create the /stream/__init__.py file
-    open(os.path.join(outDir, QSwarm.INIT_FILE_NAME), 'a').close()
+    open(os.path.join(swarmModelParamsDir, QSwarm.INIT_FILE_NAME), 'a').close()
 
-    paramsOutPath = os.path.join(outDir, swarmModelParamsPyFile)
+    paramsOutPath = os.path.join(swarmModelParamsDir, swarmModelParamsPyFile)
 
     # Write to model_params.py file.
     pp = pprint.PrettyPrinter(indent=2)

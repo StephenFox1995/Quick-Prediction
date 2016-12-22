@@ -21,7 +21,7 @@ if __name__ == "__main__":
   database.close()
   # Get ready to write to .csv file
   
-  businessID = "AF_D4C3"
+  businessID = "AF_D43473749C3"
   predict = Predict(businessID, QSwarm.SwarmType.OrderAmount)
   predict.begin(hourlyOrders)
 
