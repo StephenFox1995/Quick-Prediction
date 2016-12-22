@@ -1,0 +1,35 @@
+{
+  "includedFields": [
+    {
+      "fieldName": "timestamp",
+      "fieldType": "datetime"
+    },
+    {
+      "fieldName": "orders",
+      "fieldType": "int"
+    }
+  ],
+  "streamDef": {
+    "info": "orders",
+    "version": 1,
+    "streams": [
+      {
+        "info": "orders",
+        "source": "",
+        "columns": [
+          "*"
+        ]
+      }
+    ]
+  },
+
+  "inferenceType": "TemporalMultiStep",
+  "inferenceArgs": {
+    "predictionSteps": [
+      1
+    ],
+    "predictedField": "orders"
+  },
+  "iterationCount": -1,
+  "swarmSize": "small"
+}

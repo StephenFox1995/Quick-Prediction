@@ -10,28 +10,43 @@ class QSwarm(object):
   SWARM_WORK_DIR_NAME = "swarm" # Name of the directory for the swarm data.
   INIT_FILE_NAME = "__init__.py"
 
-  def __init__(self):
-    pass
+  def __init__(self, swarmType, businessDir, businessID):
+    self._swarmDescriptionTemplate = self.getSwarmDescTemplate(swarmType)
+    self._businessID = businessID
+    self._businessDir = businessDir
+    self.__newSwarmDescription(self._swarmDescriptionTemplate, businessDir)
+    
 
-  def __init__(self, swarmDescription):
-    """
-      Initiliases a new instance.
+  def __newSwarmDescription(self, swarmDescTemplate, businessDir):
+    # Check is businessDir/sources exists    
+    sourcesLocation = businessDir + "/sources"
+    swarmDescriptionFile = sourcesLocation + "/swarm_description.py"
+    if not os.path.exists(sourcesLocation):
+      os.makedirs(sourcesLocation)
+    
+    if not os.path.exists(swarmDescriptionFile):
+      self._swarmDescriptionTemplate["streamDef"]["streams"][0]["source"] = self.__streamSourceFormat(self._businessID, "data.csv")
+      swarmContents = json.dumps(self._swarmDescriptionTemplate)
+      # Swarm description must be assigned to a property.
+      swarmContents = "SWARM_DESCRIPTION =" + swarmContents 
+      with open(swarmDescriptionFile, "w") as f:
+        f.write(swarmContents)
+      
+  def __streamSourceFormat(self, businessID, sourceFilename):
+    # Example format: "file://sources/orders.csv",
+    return "file://" + businessID + "/sources/" + sourceFilename
 
-      @param csvFile: (string) The csv file to read the data from, which is used to generate the swarm data.
-      @param swarmDescription: (string) A description of the swarm.
-    """
-    self.swarmDescription = swarmDescription
 
-  
   def start(self, name="unnamed"):
     """
     Starts a new swarm.
+    @param swarmDir: (string) The directory for the swarm data.
     @param name: (string) The name to call the swarm.
     """
+
     self.SWARM_NAME = name
     self.__swarm()
 
-    
   def __writeModelParams(self, modelParams):
     """
     Writes the model_params to directory.
@@ -69,7 +84,7 @@ class QSwarm(object):
   
   def __swarm(self):
     """
-    Starts a swarm and writes a generated files to swarm/ directory. 
+    Starts a swarm and writes a generated files to swarm/ directory for the business.
     """
     # Create directory for swarm details
     swarmWorkDir = self.__createSwarmWorkDir()

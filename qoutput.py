@@ -26,16 +26,25 @@ class QOutput(object):
     self.outputFile.close()
     print("Done, Wrote %i data lines to %s" % (self.lineCount, self.filename))
   
-  # Create a new directory for a business for prediction data
-  # if it does not already exist.
+
   @staticmethod
-  def dirForBusiness(id, make=False):
+  def rootDirForBusiness(id, make=False):
+    """
+    Create a new root directory for a business for prediction data
+    if it does not already exist.
+    """
     # Get current location.
     dirPath = os.path.dirname(os.path.realpath(__file__))
     businessDir = dirPath + "/" + id
     if not os.path.exists(businessDir) and make == True:
       os.makedirs(businessDir)
     return businessDir
+
+    
+
+
+  
+  
 
   
 
