@@ -15,7 +15,7 @@ def args():
   parser = argparse.ArgumentParser("Execute swarms and models.")
   parser.add_argument(
     "-s", "--swarmtype", 
-          help="The swarm type to perform [orderamount, producttype].", 
+          help="The swarm type to perform.", 
           dest="swarmtype", 
           choices=set(("orderamount", "producttype"))
   )
@@ -26,7 +26,7 @@ def args():
   )
   parser.add_argument(
     "-m", "-monthsprior",
-        help="How far back data from the database should be fetched in months.",
+        help="How far back data from the database should be fetched in months for swarming.",
         dest="monthsprior",
         type=int,
         default=-3

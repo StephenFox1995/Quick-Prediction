@@ -8,19 +8,30 @@ class Database(object):
     self.port = port
     self.dbName = database
     
-  # Connect to the database.
   def connect(self):
-    self.connectionString = self._createConnectionString(self.uri, self.port, self.dbName)
+    """
+    Connects to the database from the arguments specified in the constructor.
+    """
+    self.connectionString = self.__createConnectionString(self.uri, self.port, self.dbName)
     self.client = MongoClient(self.connectionString)
     self.database = self.client.get_database(self.dbName)
     
   def close(self):
+    """
+    Closes the current connection to the database.
+    """
     self.client.close()
-  
-  # Creates connection appopriate url for connection to mongodb.
-  def _createConnectionString(self, uri, port, database):
+    
+  def __createConnectionString(self, uri, port, database):
+    """
+    Creates connection to the database.
+    """
     return "mongodb://%s:%s/%s" % (uri, port, database)
   
   # Get orders from the database connection for this class.
   def getOrders(self, fromDate):
+    """
+    Get orders from the databases starting at the fromDate argument.
+    @param fromDate:() The start date to get the order froms.
+    """
     return self.database.orders.find({"createdAt": {"$gte": fromDate}})

@@ -8,7 +8,6 @@ import consts
 
 
 class QSwarm(object):
-  SwarmType = Enum(["OrderAmount"])
   INIT_FILE_NAME = "__init__.py"
   SWARM_WORK_DIR_NAME = "swarm"
   def __init__(self, swarmType, businessDir, businessID):
