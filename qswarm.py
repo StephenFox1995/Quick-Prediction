@@ -2,6 +2,7 @@ import os
 import pprint
 from enum import Enum
 from nupic.swarming import permutations_runner
+import swarmtype
 import json
 import consts
 
@@ -56,7 +57,7 @@ class QSwarm(object):
 
   def __streamSourceFormat(self, businessID):
     # Example format: "file://sources/data/orders.csv"
-    if self._swarmType == QSwarm.SwarmType.OrderAmount:
+    if self._swarmType == swarmtype.ORD_AMOUNT:
       return "file://%s/sources/data%s" % (businessID, consts.ORDER_AMOUNT_FILE_NAME)
     else:
       return "" # Todo any other swarm types.
@@ -134,9 +135,8 @@ class QSwarm(object):
     # Get the swarm desc Object for appropriate swarm.
     currentDir = os.path.dirname(os.path.realpath(__file__))
     swarmDescObject = currentDir + "/swarm_desc_templates"
-    if swarmType == QSwarm.SwarmType.OrderAmount:
-      if swarmType == QSwarm.SwarmType.OrderAmount:
-        swarmDescObject += "/order_amount_template.json"
-        with open(swarmDescObject) as swarmDesc:
-          data = json.load(swarmDesc)
-          return data
+    if swarmType == swarmtype.ORD_AMOUNT:
+      swarmDescObject += "/order_amount_template.json"
+      with open(swarmDescObject) as swarmDesc:
+        data = json.load(swarmDesc)
+        return data

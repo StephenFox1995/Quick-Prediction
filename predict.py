@@ -2,6 +2,7 @@ from qoutput import QOutput
 from qswarm import QSwarm
 from qoutput import QOutput
 from qrunner import QRunner
+import swarmtype
 import os
 import consts
 import rowextract
@@ -14,11 +15,15 @@ class Predict(object):
     self._dirForBusiness = QOutput.rootDirForBusiness(self._businessID, make=True)
 
   def begin(self, data):
+    """
+    Begins the process of swarming and then running the model.
+    @param data:(list) The list of data to perform predictions on.
+    """
     self.__writeDataToFile(data, self._swarmType)
     self._swarmer = QSwarm(self._swarmType, self._dirForBusiness, self._businessID)
     self._modelParams = self._swarmer.start()
     self._runner = QRunner()
-    if self._swarmType == QSwarm.SwarmType.OrderAmount:
+    if self._swarmType == swarmtype.ORD_AMOUNT:
       self._runner.createModel(self._modelParams, "orders")
       self._runner.runModel(
         "orderAmountRun", 
@@ -32,7 +37,7 @@ class Predict(object):
     """
     Writes the data to a .csv file before being swarmed over.
     @param date(list): The data, typically as a list.
-    @param swarmType(QSwarm.SwarmType): The type of swarm being performed.
+    @param swarmType(string): The type of swarm being performed.
     """
     # Todo: Provide callback to handle how the data
     # for each row should be parsed.
@@ -44,7 +49,7 @@ class Predict(object):
     if not os.path.exists(dataDir):
       os.makedirs(dataDir)
 
-    if swarmType == QSwarm.SwarmType.OrderAmount:
+    if swarmType == swarmtype.ORD_AMOUNT:
       dataFile = "%s/sources/data%s" % (self._dirForBusiness, consts.ORDER_AMOUNT_FILE_NAME)
       self._dataFile = dataFile
 
