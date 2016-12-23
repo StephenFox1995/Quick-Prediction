@@ -69,9 +69,10 @@ class QSwarm(object):
     Starts a new swarm.
     @param swarmDir: (string) The directory for the swarm data.
     @param name: (string) The name to call the swarm.
+    @param (object) The model parameters generated from the swarm.
     """
     self.SWARM_NAME = name
-    self.__swarm()
+    return self.__swarm()
 
 
   def __writeModelParams(self, modelParams):
@@ -90,11 +91,13 @@ class QSwarm(object):
     paramsOutPath = os.path.join(swarmModelParamsDir, swarmModelParamsPyFile)
 
     # Write to model_params.py file.
-    pp = pprint.PrettyPrinter(indent=2)
+    
     with open(paramsOutPath, "wb") as outFile:
+        pp = pprint.PrettyPrinter(indent=2)
         modelParamsString = pp.pformat(modelParams)
         outFile.write("MODEL_PARAMS = \\\n%s" % modelParamsString)
-  
+        
+    
 
   def __createSwarmWorkDir(self):
     """
@@ -111,6 +114,7 @@ class QSwarm(object):
   def __swarm(self):
     """
     Starts a swarm and writes a generated files to swarm/ directory for the business.
+    @return modelParam:(object) Models Parameters object.
     """
     # Create directory for swarm details
     swarmWorkDir = self.__createSwarmWorkDir()
@@ -123,7 +127,7 @@ class QSwarm(object):
     )
     # Write the model parameters to swarm directory.
     self.__writeModelParams(modelParams)
-  
+    return modelParams
   
   
   def __getSwarmDescObject(self, swarmType):

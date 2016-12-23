@@ -1,10 +1,13 @@
 from qoutput import QOutput
 from qswarm import QSwarm
 from qoutput import QOutput
+from qrunner import QRunner
 import os
 import consts
+import rowextract
 
 class Predict(object):
+
   def __init__ (self, businessID, swarmType):
     self._businessID = businessID
     self._swarmType = swarmType
@@ -13,7 +16,17 @@ class Predict(object):
   def begin(self, data):
     self.__writeDataToFile(data, self._swarmType)
     self._swarmer = QSwarm(self._swarmType, self._dirForBusiness, self._businessID)
-    self._swarmer.start()
+    self._modelParams = self._swarmer.start()
+    self._runner = QRunner()
+    if self._swarmType == QSwarm.SwarmType.OrderAmount:
+      self._runner.createModel(self._modelParams, "orders")
+      self._runner.runModel(
+        "orderAmountRun", 
+        self._dataFile, 
+        self._dirForBusiness,
+        3, 
+        rowextract.orderAmountRows)
+
 
   def __writeDataToFile(self, data, swarmType):
     """
@@ -33,6 +46,7 @@ class Predict(object):
 
     if swarmType == QSwarm.SwarmType.OrderAmount:
       dataFile = "%s/sources/data%s" % (self._dirForBusiness, consts.ORDER_AMOUNT_FILE_NAME)
+      self._dataFile = dataFile
 
       csvOut = QOutput(dataFile)
       csvOut.writeHeader(["timestamp", "orders"])
@@ -42,3 +56,5 @@ class Predict(object):
         for order in row["orders"]:
           csvOut.write([order["hour"], order["amount"]])
       csvOut.close()
+  
+ 

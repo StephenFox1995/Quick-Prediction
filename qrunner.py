@@ -19,12 +19,13 @@ class QRunner(object):
     self.model = model
 
 
-  def runModel(self, runName, inputFilePath, skiprows, closure):
+  def runModel(self, runName, inPath, outDir, skiprows, closure):
     """
     Runs the model.
     @param runName: (string) The name of the runName
     @param model: () The model object.
-    @param inputFilePath: (string) The file to read and write the predictions to.
+    @param inPath: (string) The file to read and write the predictions to.
+    @param outDir: (string) The directory to write the results of the run to.
     @param closure: (function) A function thats is called on each iteration of the
       of the csv rows. It passes the row from the current iteration.
       The function should return a JSON object with the fields to run with the NuPIC model.
@@ -33,15 +34,16 @@ class QRunner(object):
           @param csvRow: (object) A csv row.
           @return json: (object) JSON object with the fields to run within NuPIC.
     """
-    inputFile = open(inputFilePath, "rb")
+    inputFile = open(inPath, "rb")
     csvReader = csv.reader(inputFile)
     
     # Create output file.
-    runOutputFile = runName + "_run_file" 
+    runOutputFile = "%s/%s_results.csv" % (outDir, runName)
     headers = csvReader.next()
     headers.append("prediction")
 
-    output = QOutput(runOutputFile, headers)
+    output = QOutput(runOutputFile)
+    output.writeHeader(headers)
     
     # Set the position to start reading the csv file.
     for i in range(0, skiprows - 1):
