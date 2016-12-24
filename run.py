@@ -39,7 +39,6 @@ if __name__ == "__main__":
   swarmType = args.swarmtype.upper()
   businessid = args.businessid
   monthsprior = monthRangeFrom(args.monthsprior)
-  print(monthsprior)
   
   # Connect to the database
   mongoDetails = mongoconfig.getMongoDetails()

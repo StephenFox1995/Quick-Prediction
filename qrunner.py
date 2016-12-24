@@ -19,21 +19,24 @@ class QRunner(object):
     self.model = model
 
 
-  def runModel(self, runName, inPath, outDir, skiprows, closure):
+  def runModel(self, runName, inPath, outDir, skiprows, func):
     """
     Runs the model.
     @param runName: (string) The name of the runName
     @param model: () The model object.
     @param inPath: (string) The file to read and write the predictions to.
     @param outDir: (string) The directory to write the results of the run to.
-    @param closure: (function) A function thats is called on each iteration of the
+    @param func: (function) A function thats is called on each iteration of the
       of the csv rows. It passes the row from the current iteration.
       The function should return a JSON object with the fields to run with the NuPIC model.
       The function signature looks as follows:
-        - closure
+        - func
           @param csvRow: (object) A csv row.
           @return json: (object) JSON object with the fields to run within NuPIC.
     """
+    if not callable(func):
+      raise ValueError('%r func arg is not callable.' % func)
+      
     inputFile = open(inPath, "rb")
     csvReader = csv.reader(inputFile)
     
@@ -51,7 +54,7 @@ class QRunner(object):
 
     # Iterate through the csv file.
     for row in csvReader:
-      json = closure(row)
+      json = func(row)
       result = self.model.run(json)
       prediction = result.inferences["multiStepBestPredictions"][1]
       
