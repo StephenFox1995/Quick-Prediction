@@ -1,20 +1,16 @@
 from pymongo import MongoClient
 
 class Database(object):
-  # Gets a connection to the database.
-  
-  def __init__(self, uri, port, database):
-    self.uri = uri
-    self.port = port
-    self.dbName = database
-    
+  def __init__(self, uri, dbName):
+    self._uri = uri
+    self._dbName = dbName
+
   def connect(self):
     """
     Connects to the database from the arguments specified in the constructor.
     """
-    self.connectionString = self.__createConnectionString(self.uri, self.port, self.dbName)
-    self.client = MongoClient(self.connectionString)
-    self.database = self.client.get_database(self.dbName)
+    self.client = MongoClient(self._uri)
+    self.database = self.client.get_database(self._dbName)
     
   def close(self):
     """
@@ -22,9 +18,9 @@ class Database(object):
     """
     self.client.close()
     
-  def __createConnectionString(self, uri, port, database):
+  def createConnectionString(self, uri, port, database):
     """
-    Creates connection to the database.
+    Creates the approriate uri to connect to the database.
     """
     return "mongodb://%s:%s/%s" % (uri, port, database)
   

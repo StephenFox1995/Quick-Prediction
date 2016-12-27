@@ -7,6 +7,11 @@ ORDER_AMOUNT_FILE_NAME = "/orderAmountData.csv"
 # see https://github.com/numenta/nupic/wiki/Running-Swarms
 SWARM_DESC_FILE_PATH = "file://%s/sources/data%s"
 
+# Init file
+INIT_FILE_NAME = "__init__.py"
+
+# Directory name for swarm data.
+SWARM_DIR_NAME = "swarm"
 
 
     

@@ -3,7 +3,6 @@ from dateutil.relativedelta import relativedelta
 from db import Database
 from predict import Predict
 from timeparser import TimeParser
-import mongoconfig
 import swarmtype
 import argparse
 
@@ -36,6 +35,16 @@ def args():
         help="The base directory to write the files to. If the directory does not exists, it will be created.",
         dest="dir"
   )
+  parser.add_argument(
+    "-uri",
+        help="The uri to connect to the mongo database in the format: 'mongodb://uri:port/database'",
+        dest="mongoURI"
+  )
+  parser.add_argument(
+    "-db", "-dbName",
+        help="The name of the Mongo database to retrieve the orders from.",
+        dest="dbName"
+  )
   return parser
 
 
@@ -44,12 +53,13 @@ if __name__ == "__main__":
   swarmType = args.swarmtype.upper()
   businessid = args.businessid
   directory = args.dir
-  
+  mongoURI = args.mongoURI
+  dbName = args.dbName
+
+
   monthsprior = monthRangeFrom(args.monthsprior)
-  
   # Connect to the database
-  mongoDetails = mongoconfig.getMongoDetails()
-  database = Database(mongoDetails["uri"], mongoDetails["port"], mongoDetails["database"])
+  database = Database(mongoURI, dbName)
   database.connect()
   # Get orders from three months ago.
   orders = database.getOrders(monthsprior)

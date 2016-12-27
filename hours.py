@@ -1,4 +1,5 @@
 from datetime import datetime
+
 # hours in datetime format
 hours = map(lambda hour: datetime.strptime(hour, "%H:%M") ,[
   "00:00",

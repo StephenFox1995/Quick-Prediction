@@ -1,6 +1,5 @@
 import os
 import pprint
-from enum import Enum
 from nupic.swarming import permutations_runner
 import swarmtype
 import json
@@ -8,8 +7,6 @@ import fileutil
 
 
 class QSwarm(object):
-  INIT_FILE_NAME = "__init__.py"
-  SWARM_WORK_DIR_NAME = "swarm"
   def __init__(self, swarmType, businessDir, businessID):
     self._swarmDescriptionObject = self.__getSwarmDescObject(swarmType)
     self._businessID = businessID
@@ -22,7 +19,7 @@ class QSwarm(object):
     """
     Creates a new swarm_description file for the business if one does
     not already exist.
-    @param swa1rmDescObject:(object) A JSON representation of the template to 
+    @param swarmDescObject:(object) A JSON representation of the template to 
                                       use for the swarm_description
     @param businessDir:(string) Root directory for the business.
     """
@@ -76,13 +73,13 @@ class QSwarm(object):
     Writes the model_params to directory.
     @param modelParams: (dict) Model Parameters generated from swarm.
     """
-    swarmModelParamsDir = os.path.join(self._businessDir, QSwarm.SWARM_WORK_DIR_NAME, self.SWARM_NAME + "_model_params")
+    swarmModelParamsDir = os.path.join(self._businessDir, fileutil.SWARM_DIR_NAME, self.SWARM_NAME + "_model_params")
     swarmModelParamsPyFile = self.SWARM_NAME + "_model_params.py"
     
     if not os.path.isdir(swarmModelParamsDir):
       os.makedirs(swarmModelParamsDir)
     # Create the /stream/__init__.py file
-    open(os.path.join(swarmModelParamsDir, QSwarm.INIT_FILE_NAME), 'a').close()
+    open(os.path.join(swarmModelParamsDir, fileutil.INIT_FILE_NAME), 'a').close()
     paramsOutPath = os.path.join(swarmModelParamsDir, swarmModelParamsPyFile)
 
     # Write to model_params.py file.
@@ -97,11 +94,11 @@ class QSwarm(object):
     """
     Creates the swarm/ directory, which stores all generated files from the swarm
     """
-    swarmWorkDir = os.path.abspath(QSwarm.SWARM_WORK_DIR_NAME)
+    swarmWorkDir = os.path.join(self._businessDir, fileutil.SWARM_DIR_NAME)
     if not os.path.exists(swarmWorkDir): 
       os.mkdir(swarmWorkDir)
       # Create __init__.py
-      open(os.path.join(swarmWorkDir, QSwarm.INIT_FILE_NAME), 'a').close()
+      open(os.path.join(swarmWorkDir, fileutil.INIT_FILE_NAME), 'a').close()
     return swarmWorkDir
   
   
