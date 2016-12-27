@@ -14,7 +14,6 @@ class QOutput(object):
     self._outputWriter = csv.writer(self._outputFile)
     print("Preparing to output data to %s" % (self._filename))
     
-    
   def writeHeader(self, header):
     self._outputWriter.writerow(header)
 
@@ -27,17 +26,18 @@ class QOutput(object):
     print("Done, Wrote %i data lines to %s" % (self._lineCount, self._filename))
   
   @staticmethod
-  def rootDirForBusiness(id, make=False):
+  def dirForBusiness(rootDir, id, make=False):
     """
     Create a new root directory for a business for prediction data
     if it does not already exist.
+    @param rootDir:(string) The directory to check if the businesses directory exists.
     @param id:(string) The id of the business.
     @param make:(bool) Make the directory if it does not exists.
     @returns The path to the busineses root directory as a string if it was created or exists.
              If a directory doesn't exist and make=false then None will be returned.
     """
     # Get current location.
-    businessDir = "%s/%s" % (fileutil.ROOT_OUT_DIR, id)
+    businessDir = "%s/%s" % (rootDir, id)
     if not os.path.exists(businessDir) and make == True:
       os.makedirs(businessDir)
       return businessDir

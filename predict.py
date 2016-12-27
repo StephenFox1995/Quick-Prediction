@@ -9,10 +9,11 @@ import rowextract
 
 class Predict(object):
 
-  def __init__ (self, businessID, swarmType):
+  def __init__ (self, businessID, swarmType, rootDir):
     self._businessID = businessID
     self._swarmType = swarmType
-    self._dirForBusiness = QOutput.rootDirForBusiness(self._businessID, make=True)
+    self._rootDir = rootDir
+    self._dirForBusiness = QOutput.dirForBusiness(rootDir, self._businessID, make=True)
 
   def begin(self, data):
     """

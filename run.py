@@ -57,5 +57,5 @@ if __name__ == "__main__":
   hourlyOrders = TimeParser.extractHourlyOrders(orders, monthsprior)
   database.close()
   # Get ready to write to .csv file
-  predict = Predict(businessid, swarmType)
+  predict = Predict(businessid, swarmType, directory)
   predict.begin(hourlyOrders)
