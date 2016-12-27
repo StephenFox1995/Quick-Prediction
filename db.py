@@ -32,6 +32,6 @@ class Database(object):
   def getOrders(self, fromDate):
     """
     Get orders from the databases starting at the fromDate argument.
-    @param fromDate:() The start date to get the order froms.
+    @param fromDate:(datetime.datetime) The start date to get the order froms.
     """
     return self.database.orders.find({"createdAt": {"$gte": fromDate}})

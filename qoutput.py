@@ -1,5 +1,6 @@
 import csv
 import os
+import fileutil
 
 # Util class for managing file and directory functionality.
 class QOutput(object):
@@ -30,14 +31,21 @@ class QOutput(object):
     """
     Create a new root directory for a business for prediction data
     if it does not already exist.
+    @param id:(string) The id of the business.
+    @param make:(bool) Make the directory if it does not exists.
+    @returns The path to the busineses root directory as a string if it was created or exists.
+             If a directory doesn't exist and make=false then None will be returned.
     """
     # Get current location.
-    dirPath = os.path.dirname(os.path.realpath(__file__))
-    businessDir = dirPath + "/" + id
+    businessDir = "%s/%s" % (fileutil.ROOT_OUT_DIR, id)
     if not os.path.exists(businessDir) and make == True:
       os.makedirs(businessDir)
-    return businessDir
-
+      return businessDir
+    elif os.path.exists(businessDir):
+      return businessDir
+    else:
+      return None
+  
     
 
 

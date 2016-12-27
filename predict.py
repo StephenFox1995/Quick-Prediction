@@ -4,7 +4,7 @@ from qoutput import QOutput
 from qrunner import QRunner
 import swarmtype
 import os
-import consts
+import fileutil
 import rowextract
 
 class Predict(object):
@@ -17,7 +17,7 @@ class Predict(object):
   def begin(self, data):
     """
     Begins the process of swarming and then running the model.
-    @param data:(list) The list of data to perform predictions on.
+    @param data: (list) The list of data to perform predictions on.
     """
     self.__writeDataToFile(data, self._swarmType)
     self._swarmer = QSwarm(self._swarmType, self._dirForBusiness, self._businessID)
@@ -42,7 +42,6 @@ class Predict(object):
     # Todo: Provide callback to handle how the data
     # for each row should be parsed.
   
-    dataFile = ""
     dataDir = "%s/sources/data" % self._dirForBusiness
 
     # Check if data directory is created.
@@ -50,10 +49,9 @@ class Predict(object):
       os.makedirs(dataDir)
 
     if swarmType == swarmtype.ORD_AMOUNT:
-      dataFile = "%s/sources/data%s" % (self._dirForBusiness, consts.ORDER_AMOUNT_FILE_NAME)
-      self._dataFile = dataFile
+      self._dataFile = "%s/sources/data%s" % (self._dirForBusiness, fileutil.ORDER_AMOUNT_FILE_NAME)
 
-      csvOut = QOutput(dataFile)
+      csvOut = QOutput(self._dataFile)
       csvOut.writeHeader(["timestamp", "orders"])
       csvOut.writeHeader(["datetime", "int"])
       csvOut.writeHeader(["T", " "])

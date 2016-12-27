@@ -48,15 +48,26 @@ class TimeParser(object):
 
   @staticmethod
   def getTimeStampsFromMongoOrderData(orders):
+    """
+    Extracts the timestamp property from each order in the list.
+    @param orders:(list) The list of orders.
+    @return List of timestamps.
+    """
     def extractTime(current):
       return current["createdAt"]
     # Get all timestamps from mongo
     return map(extractTime, orders)
   
 
-  # Extract hourly orders from an orders cursor from a date.
   @staticmethod
-  def extractHourlyOrders(orders, fromDate):
+  def extractHourlyOrders(orders, fromDate, toDate=datetime.today()):
+    """
+    Extract the hourly orders for each hour from a given date range.
+    @param orders:(list) A list of orders, which contain a timestamp field.
+    @param fromDate:(datetime) The beginning of the date range.
+    @param toDate:(datetime) The ending datetime range.
+    @return A list of the number of orders for each hour of each day in the date range.
+    """
     orderTimeStamps = TimeParser.getTimeStampsFromMongoOrderData(orders)
     # Every day fromDate to today.
     dateRange = TimeParser.getDaysInDateRange(fromDate, datetime.today())
@@ -97,9 +108,11 @@ class TimeParser(object):
     return orderDetailsForDateRange
 
 
-  # Get everyday within a date range.
   @staticmethod
   def getDaysInDateRange(start, end):
+    """
+    Find all the dates within a given date range.
+    """
     def dateRange(start, end, increment, period):
       # http://stackoverflow.com/a/10688309/2875074
       result = []

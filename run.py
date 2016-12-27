@@ -1,9 +1,9 @@
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-import mongoconfig
 from db import Database
 from predict import Predict
 from timeparser import TimeParser
+import mongoconfig
 import swarmtype
 import argparse
 
@@ -31,6 +31,11 @@ def args():
         type=int,
         default=-3
   )
+  parser.add_argument(
+    "-d", "--dir",
+        help="The base directory to write the files to. If the directory does not exists, it will be created.",
+        dest="dir"
+  )
   return parser
 
 
@@ -38,6 +43,8 @@ if __name__ == "__main__":
   args = args().parse_args()
   swarmType = args.swarmtype.upper()
   businessid = args.businessid
+  directory = args.dir
+  
   monthsprior = monthRangeFrom(args.monthsprior)
   
   # Connect to the database
