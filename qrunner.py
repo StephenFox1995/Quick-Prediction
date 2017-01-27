@@ -1,11 +1,12 @@
-from nupic.frameworks.opf.modelfactory import ModelFactory
 import csv
-import datetime
-from qoutput import QOutput 
+from nupic.frameworks.opf.modelfactory import ModelFactory
+from qoutput import QOutput
 
 class QRunner(object):
 
-  
+  def __init__(self):
+    self.model = None
+
   def createModel(self, modelParams, predictedField):
     """
     Creates a model.
@@ -36,10 +37,10 @@ class QRunner(object):
     """
     if not callable(func):
       raise ValueError('%r func arg is not callable.' % func)
-      
+
     inputFile = open(inPath, "rb")
     csvReader = csv.reader(inputFile)
-    
+
     # Create output file.
     runOutputFile = "%s/%s_results.csv" % (outDir, runName)
     headers = csvReader.next()
@@ -47,9 +48,9 @@ class QRunner(object):
 
     output = QOutput(runOutputFile)
     output.writeHeader(headers)
-    
+
     # Set the position to start reading the csv file.
-    for i in range(0, skiprows - 1):
+    for _ in range(0, skiprows - 1):
       csvReader.next()
 
     # Iterate through the csv file.
@@ -57,7 +58,7 @@ class QRunner(object):
       json = func(row)
       result = self.model.run(json)
       prediction = result.inferences["multiStepBestPredictions"][1]
-      
+
       # Get the rows from the original csv and append the prediction to it and write.
       row = []
       for value in json.itervalues():
@@ -67,10 +68,3 @@ class QRunner(object):
 
     inputFile.close()
     output.close()
-    
-    
-
-    
-
-
-    

@@ -1,19 +1,22 @@
+import os
 from qoutput import QOutput
 from qswarm import QSwarm
-from qoutput import QOutput
 from qrunner import QRunner
 import swarmtype
-import os
 import fileutil
 import rowextract
 
 class Predict(object):
 
-  def __init__ (self, businessID, swarmType, rootDir):
+  def __init__(self, businessID, swarmType, rootDir):
     self._businessID = businessID
     self._swarmType = swarmType
     self._rootDir = rootDir
     self._dirForBusiness = QOutput.dirForBusiness(rootDir, self._businessID, make=True)
+    self._swarmer = None
+    self._modelParams = None
+    self._runner = None
+    self._dataFile = None
 
   def begin(self, data):
     """
@@ -27,10 +30,10 @@ class Predict(object):
     if self._swarmType == swarmtype.ORD_AMOUNT:
       self._runner.createModel(self._modelParams, "orders")
       self._runner.runModel(
-        "orderAmountRun", 
-        self._dataFile, 
+        "orderAmountRun",
+        self._dataFile,
         self._dirForBusiness,
-        3, 
+        3,
         rowextract.orderAmountRows)
 
 
@@ -42,16 +45,19 @@ class Predict(object):
     """
     # Todo: Provide callback to handle how the data
     # for each row should be parsed.
-  
-    dataDir = "%s/sources/data" % self._dirForBusiness
+    dataDir = os.path.join(self._dirForBusiness, "sources/data")
 
     # Check if data directory is created.
     if not os.path.exists(dataDir):
       os.makedirs(dataDir)
 
     if swarmType == swarmtype.ORD_AMOUNT:
-      self._dataFile = "%s/sources/data%s" % (self._dirForBusiness, fileutil.ORDER_AMOUNT_FILE_NAME)
-
+      self._dataFile = os.path.join(
+        self._dirForBusiness,
+        "sources",
+        "data",
+        fileutil.ORDER_AMOUNT_FILE_NAME
+      )
       csvOut = QOutput(self._dataFile)
       csvOut.writeHeader(["timestamp", "orders"])
       csvOut.writeHeader(["datetime", "int"])
@@ -60,5 +66,3 @@ class Predict(object):
         for order in row["orders"]:
           csvOut.write([order["hour"], order["amount"]])
       csvOut.close()
-  
- 

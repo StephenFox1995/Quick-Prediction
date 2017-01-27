@@ -1,6 +1,5 @@
 import csv
 import os
-import fileutil
 
 # Util class for managing file and directory functionality.
 class QOutput(object):
@@ -13,7 +12,7 @@ class QOutput(object):
     self._headersWritten = False
     self._outputWriter = csv.writer(self._outputFile)
     print("Preparing to output data to %s" % (self._filename))
-    
+
   def writeHeader(self, header):
     self._outputWriter.writerow(header)
 
@@ -24,7 +23,7 @@ class QOutput(object):
   def close(self):
     self._outputFile.close()
     print("Done, Wrote %i data lines to %s" % (self._lineCount, self._filename))
-  
+
   @staticmethod
   def dirForBusiness(rootDir, id, make=False):
     """
@@ -38,21 +37,10 @@ class QOutput(object):
     """
     # Get current location.
     businessDir = "%s/%s" % (rootDir, id)
-    if not os.path.exists(businessDir) and make == True:
+    if not os.path.exists(businessDir) and make is True:
       os.makedirs(businessDir)
       return businessDir
     elif os.path.exists(businessDir):
       return businessDir
     else:
       return None
-  
-    
-
-
-  
-  
-
-  
-
-
-    

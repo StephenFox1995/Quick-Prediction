@@ -10,4 +10,4 @@ def orderAmountRows(row):
   return {
     "timestamp": timestamp,
     "orders": purchase
-    }
+  }

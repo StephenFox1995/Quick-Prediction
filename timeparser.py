@@ -4,9 +4,7 @@ from hours import hours
 
 
 class TimeParser(object):
-  def __init(self):
-    pass
-  
+
   @staticmethod
   def getOrdersForDate(date, orders):
     """
@@ -15,15 +13,15 @@ class TimeParser(object):
     date. If the objects have the same date, then they are assumed
     to be an order for that day, thus get added to the array.
     @param day: () The day to filter with the dataset.
-    @param orders: (array) The dataset of orders. 
+    @param orders: (array) The dataset of orders.
     """
     def filterDays(dayToCompare):
       DATE_FORMAT = "%d/%m/%Y"
       dateOne = datetime.strftime(date, DATE_FORMAT)
-      dateTwo = datetime.strftime(dayToCompare, DATE_FORMAT)  
+      dateTwo = datetime.strftime(dayToCompare, DATE_FORMAT)
       if dateOne == dateTwo:
         return dateTwo
-    return filter(filterDays, orders) 
+    return filter(filterDays, orders)
 
   @staticmethod
   def getOrdersForHour(hour, orders):
@@ -41,7 +39,7 @@ class TimeParser(object):
       if hourOne == hourTwo:
         return hourTwo
     return filter(filterHours, orders)
-  
+
   @staticmethod
   def zeroFillOrdersForFullDay(date):
     return map(lambda hour: {"hour": datetime.combine(date, datetime.time(hour)), "amount": 0}, hours)
@@ -57,7 +55,7 @@ class TimeParser(object):
       return current["createdAt"]
     # Get all timestamps from mongo
     return map(extractTime, orders)
-  
+
 
   @staticmethod
   def extractHourlyOrders(orders, fromDate, toDate=datetime.today()):
@@ -69,9 +67,9 @@ class TimeParser(object):
     @return A list of the number of orders for each hour of each day in the date range.
     """
     orderTimeStamps = TimeParser.getTimeStampsFromMongoOrderData(orders)
-    # Every day fromDate to today.
-    dateRange = TimeParser.getDaysInDateRange(fromDate, datetime.today())
-    
+    # Every day fromDate to toDate.
+    dateRange = TimeParser.getDaysInDateRange(fromDate, toDate)
+
     orderDetailsForDateRange = []
     for date in dateRange:
       orderDetails = {
@@ -87,17 +85,17 @@ class TimeParser(object):
         orderDetailsForDateRange.append(orderDetails)
         continue
 
-      for hour in hours:        
+      for hour in hours:
         ordersAmountForHour = len(TimeParser.getOrdersForHour(hour, ordersForDate))
         # As each hour only contains XX:XX, it doesn't have a date.
-        # Combine the current hour iteration with the current date iteration 
+        # Combine the current hour iteration with the current date iteration
         hour = datetime.combine(date, datetime.time(hour))
         if ordersAmountForHour == 0:
           info = {
             "hour": hour,
             "amount": 0
           }
-          orderDetails["orders"].append(info) 
+          orderDetails["orders"].append(info)
         else:
           info = {
             "hour": hour,
