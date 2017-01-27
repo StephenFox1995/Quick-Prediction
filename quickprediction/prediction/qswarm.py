@@ -2,8 +2,8 @@ import os
 import pprint
 import json
 from nupic.swarming import permutations_runner
-import swarmtype
-import fileutil
+from quickprediction.fileutil import fileutil
+from . import swarmtype
 
 
 class QSwarm(object):

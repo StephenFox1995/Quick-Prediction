@@ -1,13 +1,13 @@
 import os
-from qoutput import QOutput
-from qswarm import QSwarm
-from qrunner import QRunner
-import swarmtype
-import fileutil
-import rowextract
+from quickprediction.fileutil import fileutil
+from quickprediction.fileutil.qoutput import QOutput
+from quickprediction.parsers import rowextract
+from .qswarm import QSwarm
+from .qrunner import QRunner
+from . import swarmtype
+
 
 class Predict(object):
-
   def __init__(self, businessID, swarmType, rootDir):
     self._businessID = businessID
     self._swarmType = swarmType

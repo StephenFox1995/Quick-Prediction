@@ -1,10 +1,10 @@
 import argparse
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from dbs.orderdb import OrderDB
-from predict import Predict
-from timeparser import TimeParser
-from config import Configuration
+from quickprediction.dbs.orderdb import OrderDB
+from quickprediction.prediction.predict import Predict
+from quickprediction.parsers.timeparser import TimeParser
+from quickprediction.config import Configuration
 
 
 def monthRangeFrom(months=0):

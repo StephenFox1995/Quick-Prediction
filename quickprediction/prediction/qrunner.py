@@ -1,6 +1,7 @@
 import csv
 from nupic.frameworks.opf.modelfactory import ModelFactory
-from qoutput import QOutput
+from quickprediction.fileutil.qoutput import QOutput
+
 
 class QRunner(object):
 

@@ -4,8 +4,8 @@ import os
 # Util class for managing file and directory functionality.
 class QOutput(object):
 
-  def __init__(self, file):
-    self._filename = file
+  def __init__(self, filename):
+    self._filename = filename
     self._headers = []
     self._lineCount = 0
     self._outputFile = open(self._filename, 'w+')
@@ -25,18 +25,18 @@ class QOutput(object):
     print("Done, Wrote %i data lines to %s" % (self._lineCount, self._filename))
 
   @staticmethod
-  def dirForBusiness(rootDir, id, make=False):
+  def dirForBusiness(rootDir, businessID, make=False):
     """
     Create a new root directory for a business for prediction data
     if it does not already exist.
     @param rootDir:(string) The directory to check if the businesses directory exists.
-    @param id:(string) The id of the business.
+    @param businessID:(string) The businessID of the business.
     @param make:(bool) Make the directory if it does not exists.
     @returns The path to the busineses root directory as a string if it was created or exists.
              If a directory doesn't exist and make=false then None will be returned.
     """
     # Get current location.
-    businessDir = "%s/%s" % (rootDir, id)
+    businessDir = "%s/%s" % (rootDir, businessID)
     if not os.path.exists(businessDir) and make is True:
       os.makedirs(businessDir)
       return businessDir

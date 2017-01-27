@@ -1,6 +1,6 @@
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from hours import hours
+from .hours import hours
 
 
 class TimeParser(object):
