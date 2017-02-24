@@ -102,7 +102,7 @@ class TimeParser(object):
             "amount": ordersAmountForHour
           }
           orderDetails["orders"].append(info)
-    orderDetailsForDateRange.append(orderDetails)
+      orderDetailsForDateRange.append(orderDetails)
     return orderDetailsForDateRange
 
 

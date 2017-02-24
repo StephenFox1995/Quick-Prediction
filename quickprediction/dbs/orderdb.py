@@ -11,5 +11,8 @@ class OrderDB(Database):
     @param fromDate:(datetime.datetime) The start date to get the order froms.
     """
     super(OrderDB, self).read()
-    pipeline = {"createdAt": {"$gte": fromDate}}
+    pipeline =  {"$and": [{"status": "processed"}, {"createdAt": {"$gte": fromDate }}] }
     return self._database.orders.find(pipeline)
+
+  def writePredictedOrders(self):
+    pass
