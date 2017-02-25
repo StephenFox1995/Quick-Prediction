@@ -18,6 +18,14 @@ class Predict(object):
     self._runner = None
     self._dataFile = None
 
+
+  def csvFilepath(self):
+    """
+      The CSV file that contains the outputted data.
+    """
+    return self._dataFile
+
+
   def begin(self, data):
     """
     Begins the process of swarming and then running the model.

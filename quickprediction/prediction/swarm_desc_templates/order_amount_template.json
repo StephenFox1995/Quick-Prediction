@@ -20,7 +20,28 @@
           "*"
         ]
       }
-    ]
+    ],
+    "aggregation": {
+      "hours": 1,
+      "microseconds": 0,
+      "seconds": 0,
+      "fields": [
+        [
+          "orders",
+          "sum"
+        ],
+        [
+          "timestamp",
+          "first"
+        ]
+      ],
+      "weeks": 0,
+      "months": 0,
+      "minutes": 0,
+      "days": 0,
+      "milliseconds": 0,
+      "years": 0
+    }
   },
 
   "inferenceType": "TemporalMultiStep",
@@ -31,5 +52,5 @@
     "predictedField": "orders"
   },
   "iterationCount": -1,
-  "swarmSize": "small"
+  "swarmSize": "medium"
 }

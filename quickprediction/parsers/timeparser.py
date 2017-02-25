@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from .hours import hours
 
@@ -67,6 +67,7 @@ class TimeParser(object):
     @return A list of the number of orders for each hour of each day in the date range.
     """
     orderTimeStamps = TimeParser.getTimeStampsFromMongoOrderData(orders)
+    toDate = datetime.today() + timedelta(days=1)
     # Every day fromDate to toDate.
     dateRange = TimeParser.getDaysInDateRange(fromDate, toDate)
 
