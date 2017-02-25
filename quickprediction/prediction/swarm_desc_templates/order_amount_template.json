@@ -52,5 +52,5 @@
     "predictedField": "orders"
   },
   "iterationCount": -1,
-  "swarmSize": "medium"
+  "swarmSize": "small"
 }

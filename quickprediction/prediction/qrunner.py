@@ -8,6 +8,7 @@ class QRunner(object):
   def __init__(self):
     self.model = None
 
+
   def createModel(self, modelParams, predictedField):
     """
     Creates a model.
@@ -35,6 +36,7 @@ class QRunner(object):
         - func
           @param csvRow: (object) A csv row.
           @return json: (object) JSON object with the fields to run within NuPIC.
+    @return list containing all the rows written to the .csv file.
     """
     if not callable(func):
       raise ValueError('%r func arg is not callable.' % func)
@@ -54,6 +56,8 @@ class QRunner(object):
     for _ in range(0, skiprows - 1):
       csvReader.next()
 
+    predictionData = [] # keep reference so we can return.
+
     # Iterate through the csv file.
     for row in csvReader:
       json = func(row)
@@ -65,7 +69,13 @@ class QRunner(object):
       for value in json.itervalues():
         row.append(value)
       row.append(prediction)
+      predictionData.append({
+        "timestamp": row[0],
+        "orders": row[1],
+        "prediction": prediction,
+      })
       output.write(row)
 
     inputFile.close()
     output.close()
+    return predictionData

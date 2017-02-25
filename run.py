@@ -2,6 +2,7 @@ import argparse
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from quickprediction.dbs.orderdb import OrderDB
+from quickprediction.dbs.predictiondb import PredictionDB
 from quickprediction.prediction.predict import Predict
 from quickprediction.parsers.timeparser import TimeParser
 from quickprediction.config import Configuration
@@ -51,19 +52,31 @@ if __name__ == "__main__":
   config = Configuration()
   dbDetails = config.read([Configuration.DATABASES])[0][0]
   # Connect to the database
-  database = OrderDB(
+  orderDB = OrderDB(
     dbDetails["uri"],
     dbDetails["port"],
     dbDetails["database"],
     dbDetails["username"],
     dbDetails["password"]
   )
-  database.connect()
+  orderDB.connect()
   # Get orders from three months ago.
-  orders = database.read(fromDate=monthsprior)
+  orders = orderDB.read(fromDate=monthsprior)
   # Parse out the number of orders for each hour of the last three months.
   hourlyOrders = TimeParser.extractHourlyOrders(orders, monthsprior)
-  database.close()
+  orderDB.close()
   # Get ready to write to .csv file
   predict = Predict(businessid, swarmType, directory)
-  predict.begin(hourlyOrders)
+  rows = predict.begin(hourlyOrders)
+
+  print("Writing to database...")
+  predictionDB = PredictionDB(
+    dbDetails["uri"],
+    dbDetails["port"],
+    dbDetails["database"],
+    dbDetails["username"],
+    dbDetails["password"]
+  )
+  predictionDB.connect()
+  predictionDB.write(businessid, swarmType, rows)
+  print("Done!")

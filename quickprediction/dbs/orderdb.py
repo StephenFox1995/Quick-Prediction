@@ -13,6 +13,3 @@ class OrderDB(Database):
     super(OrderDB, self).read()
     pipeline =  {"$and": [{"status": "processed"}, {"createdAt": {"$gte": fromDate }}] }
     return self._database.orders.find(pipeline)
-
-  def writePredictedOrders(self):
-    pass

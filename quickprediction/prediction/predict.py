@@ -28,8 +28,9 @@ class Predict(object):
 
   def begin(self, data):
     """
-    Begins the process of swarming and then running the model.
-    @param data: (list) The list of data to perform predictions on.
+      Begins the process of swarming and then running the model.
+        @param data: (list) The list of data to perform predictions on.
+        @return list of the rows that were predicted.
     """
     self.__writeDataToFile(data, self._swarmType)
     self._swarmer = QSwarm(self._swarmType, self._dirForBusiness, self._businessID)
@@ -37,7 +38,7 @@ class Predict(object):
     self._runner = QRunner()
     if self._swarmType == swarmtype.ORD_AMOUNT:
       self._runner.createModel(self._modelParams, "orders")
-      self._runner.runModel(
+      return self._runner.runModel(
         "orderAmountRun",
         self._dataFile,
         self._dirForBusiness,
