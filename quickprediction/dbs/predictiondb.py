@@ -1,5 +1,5 @@
 from .database import Database
-
+from bson.objectid import ObjectId
 
 class PredictionDB(Database):
   def __init__(self, uri, port, dbName, user=None, password=None):
@@ -8,8 +8,9 @@ class PredictionDB(Database):
 
   def write(self, businessID, swarmType, data):
     predictionData = {
-      "businessID": businessID,
+      "businessID": ObjectId(businessID),
       "swarmType": swarmType,
       "data": data
     }
-    self._database.prediction.insert(predictionData)
+    self._database.predictions.remove({"businessID":  ObjectId(businessID)})
+    self._database.predictions.insert(predictionData)

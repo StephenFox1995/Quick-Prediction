@@ -7,10 +7,11 @@
 Configuration	quickprediction/config/__init__.py	/^from .configuration import Configuration$/;"	kind:namespace	line:1
 Configuration	quickprediction/config/configuration.py	/^class Configuration(object):$/;"	kind:class	line:5
 Configuration	quickprediction/config/run.py	/^from .configuration import Configuration$/;"	kind:namespace	line:2
-Configuration	run.py	/^from quickprediction.config import Configuration$/;"	kind:namespace	line:7
+Configuration	run.py	/^from quickprediction.config import Configuration$/;"	kind:namespace	line:8
 DATABASES	quickprediction/config/configuration.py	/^  DATABASES = "databases"$/;"	kind:variable	line:10
 Database	quickprediction/dbs/database.py	/^class Database(object):$/;"	kind:class	line:4
 Database	quickprediction/dbs/orderdb.py	/^from .database import Database$/;"	kind:namespace	line:1
+Database	quickprediction/dbs/predictiondb.py	/^from .database import Database$/;"	kind:namespace	line:1
 GMAPS_KEY	quickprediction/config/configuration.py	/^  GMAPS_KEY = "gmaps"$/;"	kind:variable	line:9
 INIT_FILE_NAME	quickprediction/fileutil/fileutil.py	/^INIT_FILE_NAME = "__init__.py"$/;"	kind:variable	line:14
 InvalidConnectionError	quickprediction/dbs/database.py	/^  class InvalidConnectionError(Exception):$/;"	kind:class	line:5
@@ -18,11 +19,14 @@ ModelFactory	quickprediction/prediction/qrunner.py	/^from nupic.frameworks.opf.m
 MongoClient	quickprediction/dbs/database.py	/^from pymongo import MongoClient$/;"	kind:namespace	line:1
 ORDER_AMOUNT_FILE_NAME	quickprediction/fileutil/fileutil.py	/^ORDER_AMOUNT_FILE_NAME = "orderAmountData.csv"$/;"	kind:variable	line:4
 ORD_AMOUNT	quickprediction/prediction/swarmtype.py	/^ORD_AMOUNT = "ORDERAMOUNT"$/;"	kind:variable	line:3
+ObjectId	quickprediction/dbs/predictiondb.py	/^from bson.objectid import ObjectId$/;"	kind:namespace	line:2
 OrderDB	quickprediction/dbs/orderdb.py	/^class OrderDB(Database):$/;"	kind:class	line:4
 OrderDB	run.py	/^from quickprediction.dbs.orderdb import OrderDB$/;"	kind:namespace	line:4
 PROD_TYPE	quickprediction/prediction/swarmtype.py	/^PROD_TYPE = "PRODUCTTYPE"$/;"	kind:variable	line:6
 Predict	quickprediction/prediction/predict.py	/^class Predict(object):$/;"	kind:class	line:10
-Predict	run.py	/^from quickprediction.prediction.predict import Predict$/;"	kind:namespace	line:5
+Predict	run.py	/^from quickprediction.prediction.predict import Predict$/;"	kind:namespace	line:6
+PredictionDB	quickprediction/dbs/predictiondb.py	/^class PredictionDB(Database):$/;"	kind:class	line:4
+PredictionDB	run.py	/^from quickprediction.dbs.predictiondb import PredictionDB$/;"	kind:namespace	line:5
 QOutput	quickprediction/fileutil/qoutput.py	/^class QOutput(object):$/;"	kind:class	line:5
 QOutput	quickprediction/prediction/predict.py	/^from quickprediction.fileutil.qoutput import QOutput$/;"	kind:namespace	line:3
 QOutput	quickprediction/prediction/qrunner.py	/^from quickprediction.fileutil.qoutput import QOutput$/;"	kind:namespace	line:3
@@ -33,7 +37,7 @@ QSwarm	quickprediction/prediction/qswarm.py	/^class QSwarm(object):$/;"	kind:cla
 SWARM_DIR_NAME	quickprediction/fileutil/fileutil.py	/^SWARM_DIR_NAME = "swarm"$/;"	kind:variable	line:17
 TOKEN	quickprediction/config/configuration.py	/^  TOKEN = "token"$/;"	kind:variable	line:11
 TimeParser	quickprediction/parsers/timeparser.py	/^class TimeParser(object):$/;"	kind:class	line:6
-TimeParser	run.py	/^from quickprediction.parsers.timeparser import TimeParser$/;"	kind:namespace	line:6
+TimeParser	run.py	/^from quickprediction.parsers.timeparser import TimeParser$/;"	kind:namespace	line:7
 _CONFIG_DIR	quickprediction/config/configuration.py	/^  _CONFIG_DIR = "\/etc\/quick\/"$/;"	kind:variable	line:15
 _CONFIG_FILENAME	quickprediction/config/configuration.py	/^  _CONFIG_FILENAME = "config.json"$/;"	kind:variable	line:13
 _CONFIG_FILE_PATH	quickprediction/config/configuration.py	/^  _CONFIG_FILE_PATH = "\/etc\/quick\/%s" % _CONFIG_FILENAME$/;"	kind:variable	line:14
@@ -47,6 +51,7 @@ __dbCompare	quickprediction/config/configuration.py	/^  def __dbCompare(self, db
 __getSwarmDescObject	quickprediction/prediction/qswarm.py	/^  def __getSwarmDescObject(self, swarmType):$/;"	kind:member	line:127
 __init__	quickprediction/dbs/database.py	/^  def __init__(self, uri, port, dbName, user=None, password=None):$/;"	kind:member	line:8
 __init__	quickprediction/dbs/orderdb.py	/^  def __init__(self, uri, port, dbName, user=None, password=None):$/;"	kind:member	line:5
+__init__	quickprediction/dbs/predictiondb.py	/^  def __init__(self, uri, port, dbName, user=None, password=None):$/;"	kind:member	line:5
 __init__	quickprediction/fileutil/qoutput.py	/^  def __init__(self, filename):$/;"	kind:member	line:7
 __init__	quickprediction/prediction/predict.py	/^  def __init__(self, businessID, swarmType, rootDir):$/;"	kind:member	line:11
 __init__	quickprediction/prediction/qrunner.py	/^  def __init__(self):$/;"	kind:member	line:8
@@ -62,41 +67,40 @@ __readConfigFile	quickprediction/config/configuration.py	/^  def __readConfigFil
 __streamSourceFormat	quickprediction/prediction/qswarm.py	/^  def __streamSourceFormat(self):$/;"	kind:member	line:52
 __swarm	quickprediction/prediction/qswarm.py	/^  def __swarm(self):$/;"	kind:member	line:108
 __writeConfigFile	quickprediction/config/configuration.py	/^  def __writeConfigFile(self, contents):$/;"	kind:member	line:178
-__writeDataToFile	quickprediction/prediction/predict.py	/^  def __writeDataToFile(self, data, swarmType):$/;"	kind:member	line:48
+__writeDataToFile	quickprediction/prediction/predict.py	/^  def __writeDataToFile(self, data, swarmType):$/;"	kind:member	line:49
 __writeModelParams	quickprediction/prediction/qswarm.py	/^  def __writeModelParams(self, modelParams):$/;"	kind:member	line:70
 addGoogleMapsKey	quickprediction/config/configuration.py	/^  def addGoogleMapsKey(self, key):$/;"	kind:member	line:112
 addMongoDatabase	quickprediction/config/configuration.py	/^  def addMongoDatabase(self, uri, port, database, username=None, password=None):$/;"	kind:member	line:54
 addTokenSecretKey	quickprediction/config/configuration.py	/^  def addTokenSecretKey(self, secret):$/;"	kind:member	line:131
 argparse	quickprediction/config/run.py	/^import argparse$/;"	kind:namespace	line:1
 argparse	run.py	/^import argparse$/;"	kind:namespace	line:1
-args	run.py	/^  args = args().parse_args()$/;"	kind:variable	line:44
-args	run.py	/^def args():$/;"	kind:function	line:14
+args	run.py	/^  args = args().parse_args()$/;"	kind:variable	line:45
+args	run.py	/^def args():$/;"	kind:function	line:15
 begin	quickprediction/prediction/predict.py	/^  def begin(self, data):$/;"	kind:member	line:29
-businessid	run.py	/^  businessid = args.businessid$/;"	kind:variable	line:46
+businessid	run.py	/^  businessid = args.businessid$/;"	kind:variable	line:47
 checkRoot	quickprediction/config/configuration.py	/^  def checkRoot():$/;"	kind:member	line:23
 close	quickprediction/dbs/database.py	/^  def close(self):$/;"	kind:member	line:30
 close	quickprediction/fileutil/qoutput.py	/^  def close(self):$/;"	kind:member	line:23
-config	run.py	/^  config = Configuration()$/;"	kind:variable	line:51
+config	run.py	/^  config = Configuration()$/;"	kind:variable	line:52
 configuration.py	quickprediction/config/configuration.py	1;"	kind:file	line:1
 connString	quickprediction/dbs/mongoutil.py	/^def connString(uri, port, database, user=None, password=None):$/;"	kind:function	line:1
 connect	quickprediction/dbs/database.py	/^  def connect(self):$/;"	kind:member	line:19
-createModel	quickprediction/prediction/qrunner.py	/^  def createModel(self, modelParams, predictedField):$/;"	kind:member	line:11
+createModel	quickprediction/prediction/qrunner.py	/^  def createModel(self, modelParams, predictedField):$/;"	kind:member	line:12
 csv	quickprediction/fileutil/qoutput.py	/^import csv$/;"	kind:namespace	line:1
 csv	quickprediction/prediction/qrunner.py	/^import csv$/;"	kind:namespace	line:1
 csvFilepath	quickprediction/prediction/predict.py	/^  def csvFilepath(self):$/;"	kind:member	line:22
-database	run.py	/^  database = OrderDB($/;"	kind:variable	line:54
 database.py	quickprediction/dbs/database.py	1;"	kind:file	line:1
-dateRange	quickprediction/parsers/timeparser.py	/^    def dateRange(start, end, increment, period):$/;"	kind:function	line:114
+dateRange	quickprediction/parsers/timeparser.py	/^    def dateRange(start, end, increment, period):$/;"	kind:function	line:115
 datetime	quickprediction/parsers/hours.py	/^from datetime import datetime$/;"	kind:namespace	line:1
 datetime	quickprediction/parsers/rowextract.py	/^import datetime$/;"	kind:namespace	line:1
-datetime	quickprediction/parsers/timeparser.py	/^from datetime import datetime$/;"	kind:namespace	line:1
+datetime	quickprediction/parsers/timeparser.py	/^from datetime import datetime, timedelta$/;"	kind:namespace	line:1
 datetime	run.py	/^from datetime import datetime$/;"	kind:namespace	line:2
-dbDetails	run.py	/^  dbDetails = config.read([Configuration.DATABASES])[0][0]$/;"	kind:variable	line:52
+dbDetails	run.py	/^  dbDetails = config.read([Configuration.DATABASES])[0][0]$/;"	kind:variable	line:53
 deleteGoogleMapsKey	quickprediction/config/configuration.py	/^  def deleteGoogleMapsKey(self):$/;"	kind:member	line:122
 deleteMongoDatabase	quickprediction/config/configuration.py	/^  def deleteMongoDatabase(self, uri, port, database):$/;"	kind:member	line:78
 deleteTokenSecretKey	quickprediction/config/configuration.py	/^  def deleteTokenSecretKey(self):$/;"	kind:member	line:143
 dirForBusiness	quickprediction/fileutil/qoutput.py	/^  def dirForBusiness(rootDir, businessID, make=False):$/;"	kind:member	line:28
-directory	run.py	/^  directory = args.dir$/;"	kind:variable	line:47
+directory	run.py	/^  directory = args.dir$/;"	kind:variable	line:48
 extractHourlyOrders	quickprediction/parsers/timeparser.py	/^  def extractHourlyOrders(orders, fromDate, toDate=datetime.today()):$/;"	kind:member	line:61
 extractTime	quickprediction/parsers/timeparser.py	/^    def extractTime(current):$/;"	kind:function	line:54
 fileutil	quickprediction/prediction/predict.py	/^from quickprediction.fileutil import fileutil$/;"	kind:namespace	line:2
@@ -105,12 +109,12 @@ fileutil.py	quickprediction/fileutil/fileutil.py	1;"	kind:file	line:1
 filterDays	quickprediction/parsers/timeparser.py	/^    def filterDays(dayToCompare):$/;"	kind:function	line:18
 filterHours	quickprediction/parsers/timeparser.py	/^    def filterHours(hourToCompare):$/;"	kind:function	line:35
 getArgs	quickprediction/config/run.py	/^def getArgs():$/;"	kind:function	line:5
-getDaysInDateRange	quickprediction/parsers/timeparser.py	/^  def getDaysInDateRange(start, end):$/;"	kind:member	line:110
+getDaysInDateRange	quickprediction/parsers/timeparser.py	/^  def getDaysInDateRange(start, end):$/;"	kind:member	line:111
 getOrdersForDate	quickprediction/parsers/timeparser.py	/^  def getOrdersForDate(date, orders):$/;"	kind:member	line:9
 getOrdersForHour	quickprediction/parsers/timeparser.py	/^  def getOrdersForHour(hour, orders):$/;"	kind:member	line:27
 getTimeStampsFromMongoOrderData	quickprediction/parsers/timeparser.py	/^  def getTimeStampsFromMongoOrderData(orders):$/;"	kind:member	line:48
 handleArgs	quickprediction/config/run.py	/^def handleArgs(parser):$/;"	kind:function	line:111
-hourlyOrders	run.py	/^  hourlyOrders = TimeParser.extractHourlyOrders(orders, monthsprior)$/;"	kind:variable	line:65
+hourlyOrders	run.py	/^  hourlyOrders = TimeParser.extractHourlyOrders(orders, monthsprior)$/;"	kind:variable	line:66
 hours	quickprediction/parsers/hours.py	/^hours = map(lambda hour: datetime.strptime(hour, "%H:%M"), [$/;"	kind:variable	line:4
 hours	quickprediction/parsers/timeparser.py	/^from .hours import hours$/;"	kind:namespace	line:3
 hours.py	quickprediction/parsers/hours.py	1;"	kind:file	line:1
@@ -120,19 +124,22 @@ json	quickprediction/prediction/qswarm.py	/^import json$/;"	kind:namespace	line:
 makeConfigFile	quickprediction/config/configuration.py	/^  def makeConfigFile(self):$/;"	kind:member	line:32
 mongoutil	quickprediction/dbs/database.py	/^from . import mongoutil$/;"	kind:namespace	line:2
 mongoutil.py	quickprediction/dbs/mongoutil.py	1;"	kind:file	line:1
-monthRangeFrom	run.py	/^def monthRangeFrom(months=0):$/;"	kind:function	line:10
-monthsprior	run.py	/^  monthsprior = monthRangeFrom(args.monthsprior)$/;"	kind:variable	line:49
+monthRangeFrom	run.py	/^def monthRangeFrom(months=0):$/;"	kind:function	line:11
+monthsprior	run.py	/^  monthsprior = monthRangeFrom(args.monthsprior)$/;"	kind:variable	line:50
 orderAmountRows	quickprediction/parsers/rowextract.py	/^def orderAmountRows(row):$/;"	kind:function	line:2
+orderDB	run.py	/^  orderDB = OrderDB($/;"	kind:variable	line:55
 orderdb.py	quickprediction/dbs/orderdb.py	1;"	kind:file	line:1
-orders	run.py	/^  orders = database.read(fromDate=monthsprior)$/;"	kind:variable	line:63
+orders	run.py	/^  orders = orderDB.read(fromDate=monthsprior)$/;"	kind:variable	line:64
 os	quickprediction/config/configuration.py	/^import os$/;"	kind:namespace	line:1
 os	quickprediction/fileutil/qoutput.py	/^import os$/;"	kind:namespace	line:2
 os	quickprediction/prediction/predict.py	/^import os$/;"	kind:namespace	line:1
 os	quickprediction/prediction/qswarm.py	/^import os$/;"	kind:namespace	line:1
 permutations_runner	quickprediction/prediction/qswarm.py	/^from nupic.swarming import permutations_runner$/;"	kind:namespace	line:4
 pprint	quickprediction/prediction/qswarm.py	/^import pprint$/;"	kind:namespace	line:2
-predict	run.py	/^  predict = Predict(businessid, swarmType, directory)$/;"	kind:variable	line:68
+predict	run.py	/^  predict = Predict(businessid, swarmType, directory)$/;"	kind:variable	line:69
 predict.py	quickprediction/prediction/predict.py	1;"	kind:file	line:1
+predictionDB	run.py	/^  predictionDB = PredictionDB($/;"	kind:variable	line:73
+predictiondb.py	quickprediction/dbs/predictiondb.py	1;"	kind:file	line:1
 printArgs	quickprediction/config/run.py	/^def printArgs(objectList, pformat="raw"):$/;"	kind:function	line:94
 qoutput.py	quickprediction/fileutil/qoutput.py	1;"	kind:file	line:1
 qrunner.py	quickprediction/prediction/qrunner.py	1;"	kind:file	line:1
@@ -144,17 +151,19 @@ relativedelta	quickprediction/parsers/timeparser.py	/^from dateutil.relativedelt
 relativedelta	run.py	/^from dateutil.relativedelta import relativedelta$/;"	kind:namespace	line:3
 rowextract	quickprediction/prediction/predict.py	/^from quickprediction.parsers import rowextract$/;"	kind:namespace	line:4
 rowextract.py	quickprediction/parsers/rowextract.py	1;"	kind:file	line:1
+rows	run.py	/^  rows = predict.begin(hourlyOrders)$/;"	kind:variable	line:70
 run.py	quickprediction/config/run.py	1;"	kind:file	line:1
 run.py	run.py	1;"	kind:file	line:1
-runModel	quickprediction/prediction/qrunner.py	/^  def runModel(self, runName, inPath, outDir, skiprows, func):$/;"	kind:member	line:24
+runModel	quickprediction/prediction/qrunner.py	/^  def runModel(self, runName, inPath, outDir, skiprows, func):$/;"	kind:member	line:25
 start	quickprediction/prediction/qswarm.py	/^  def start(self, name="unnamed"):$/;"	kind:member	line:59
 swarmDescPath	quickprediction/fileutil/fileutil.py	/^def swarmDescPath(directory, filename):$/;"	kind:function	line:9
-swarmType	run.py	/^  swarmType = args.swarmtype.upper()$/;"	kind:variable	line:45
+swarmType	run.py	/^  swarmType = args.swarmtype.upper()$/;"	kind:variable	line:46
 swarmtype	quickprediction/prediction/predict.py	/^from . import swarmtype$/;"	kind:namespace	line:7
 swarmtype	quickprediction/prediction/qswarm.py	/^from . import swarmtype$/;"	kind:namespace	line:6
 swarmtype.py	quickprediction/prediction/swarmtype.py	1;"	kind:file	line:1
+timedelta	quickprediction/parsers/timeparser.py	/^from datetime import datetime, timedelta$/;"	kind:namespace	line:1
 timeparser.py	quickprediction/parsers/timeparser.py	1;"	kind:file	line:1
+write	quickprediction/dbs/predictiondb.py	/^  def write(self, businessID, swarmType, data):$/;"	kind:member	line:9
 write	quickprediction/fileutil/qoutput.py	/^  def write(self, row):$/;"	kind:member	line:19
 writeHeader	quickprediction/fileutil/qoutput.py	/^  def writeHeader(self, header):$/;"	kind:member	line:16
-writePredictedOrders	quickprediction/dbs/orderdb.py	/^  def writePredictedOrders(self):$/;"	kind:member	line:17
 zeroFillOrdersForFullDay	quickprediction/parsers/timeparser.py	/^  def zeroFillOrdersForFullDay(date):$/;"	kind:member	line:44
