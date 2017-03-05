@@ -1,0 +1,56 @@
+{
+  "includedFields": [
+    {
+      "fieldName": "timestamp",
+      "fieldType": "datetime"
+    },
+    {
+      "fieldName": "employeesNeeded",
+      "fieldType": "int"
+    }
+  ],
+  "streamDef": {
+    "info": "employeesNeeded",
+    "version": 1,
+    "streams": [
+      {
+        "info": "employeesNeeded",
+        "source": "",
+        "columns": [
+          "*"
+        ]
+      }
+    ],
+    "aggregation": {
+      "hours": 1,
+      "microseconds": 0,
+      "seconds": 0,
+      "fields": [
+        [
+          "employeesNeeded",
+          "sum"
+        ],
+        [
+          "timestamp",
+          "first"
+        ]
+      ],
+      "weeks": 0,
+      "months": 0,
+      "minutes": 0,
+      "days": 0,
+      "milliseconds": 0,
+      "years": 0
+    }
+  },
+
+  "inferenceType": "TemporalMultiStep",
+  "inferenceArgs": {
+    "predictionSteps": [
+      1
+    ],
+    "predictedField": "employeesNeeded"
+  },
+  "iterationCount": -1,
+  "swarmSize": "small"
+}

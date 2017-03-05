@@ -1,12 +1,12 @@
 import argparse
 from datetime import datetime
+from quickprediction.prediction import swarmtype
 from dateutil.relativedelta import relativedelta
 from quickprediction.dbs.orderdb import OrderDB
 from quickprediction.dbs.predictiondb import PredictionDB
 from quickprediction.prediction.predict import Predict
-from quickprediction.parsers.timeparser import TimeParser
 from quickprediction.config import Configuration
-
+from quickprediction.parsers.timeparser import *
 
 def monthRangeFrom(months=0):
   return datetime.today() + relativedelta(months=months)
@@ -18,7 +18,7 @@ def args():
     "-s", "--swarmtype",
     help="The swarm type to perform.",
     dest="swarmtype",
-    choices=set(("orderamount", "producttype"))
+    choices=set(("orderamount", "expectedemployees"))
   )
   parser.add_argument(
     "-b", "--businessid",
@@ -38,6 +38,11 @@ def args():
       If the directory does not exists, it will be created.",
     dest="dir"
   )
+  parser.add_argument(
+    "--multitask",
+    help="The multitask value",
+    dest="multitask"
+  )
   return parser
 
 
@@ -46,7 +51,7 @@ if __name__ == "__main__":
   swarmType = args.swarmtype.upper()
   businessid = args.businessid
   directory = args.dir
-
+  multitask = args.multitask
   monthsprior = monthRangeFrom(args.monthsprior)
 
   config = Configuration()
@@ -62,12 +67,19 @@ if __name__ == "__main__":
   orderDB.connect()
   # Get orders from three months ago.
   orders = orderDB.read(fromDate=monthsprior)
-  # Parse out the number of orders for each hour of the last three months.
-  hourlyOrders = TimeParser.extractHourlyOrders(orders, monthsprior)
+  predictData = None
+
+  if swarmType == swarmtype.ORD_AMOUNT:
+    # Parse out the number of orders for each hour of the last x months.
+    predictData = extractHourlyOrders(orders, monthsprior)
+  elif swarmtype.EXPECTED_EMPLOYEES:
+    # Parse out the number of conflicts for each hour of the last x months.
+    predictData = extractHourlyConflicts(orders, monthsprior, multitask=multitask)
   orderDB.close()
+
   # Get ready to write to .csv file
   predict = Predict(businessid, swarmType, directory)
-  rows = predict.begin(hourlyOrders)
+  rows = predict.begin(predictData)
 
   print("Writing to database...")
   predictionDB = PredictionDB(

@@ -1,7 +1,7 @@
 import csv
 from nupic.frameworks.opf.modelfactory import ModelFactory
-from quickprediction.fileutil.qoutput import QOutput
-
+from quickprediction.utils.qoutput import QOutput
+import quickprediction.prediction.swarmtype as swarmtype
 
 class QRunner(object):
 
@@ -22,12 +22,13 @@ class QRunner(object):
     self.model = model
 
 
-  def runModel(self, runName, inPath, outDir, skiprows, func):
+  def runModel(self, runName, inPath, swarmType, outDir, skiprows, func):
     """
     Runs the model.
     @param runName: (string) The name of the runName
     @param model: () The model object.
     @param inPath: (string) The file to read and write the predictions to.
+    @param swarmType: () The type of swarm to run.
     @param outDir: (string) The directory to write the results of the run to.
     @param func: (function) A function thats is called on each iteration of the
       of the csv rows. It passes the row from the current iteration.
@@ -69,12 +70,20 @@ class QRunner(object):
       for value in json.itervalues():
         row.append(value)
       row.append(prediction)
-      predictionData.append({
-        "timestamp": row[0],
-        "orders": row[1],
-        "prediction": prediction,
-      })
-      output.write(row)
+      if swarmType == swarmtype.ORD_AMOUNT:
+        predictionData.append({
+          "timestamp": row[0],
+          "orders": row[1],
+          "prediction": prediction,
+        })
+        output.write(row)
+      elif swarmType == swarmtype.EXPECTED_EMPLOYEES:
+        predictionData.append({
+          "timestamp": row[0],
+          "employeesNeeded": row[1],
+          "prediction": prediction,
+        })
+        output.write(row)
 
     inputFile.close()
     output.close()

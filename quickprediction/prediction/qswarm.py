@@ -2,7 +2,7 @@ import os
 import pprint
 import json
 from nupic.swarming import permutations_runner
-from quickprediction.fileutil import fileutil
+from quickprediction.utils import fileutil
 from . import swarmtype
 
 
@@ -26,7 +26,10 @@ class QSwarm(object):
     print("Checking if a swarm_description.json exists...")
     # Check is businessDir/sources exists
     sourcesDir = os.path.join(businessDir, "sources")
-    self._swarmDescriptionFile = os.path.join(sourcesDir, 'swarm_description.json')
+    if self._swarmType == swarmtype.ORD_AMOUNT:
+      self._swarmDescriptionFile = os.path.join(sourcesDir, 'orderamount', 'swarm_description.json')
+    elif self._swarmType == swarmtype.EXPECTED_EMPLOYEES:
+      self._swarmDescriptionFile = os.path.join(sourcesDir, 'employeesneeded', 'swarm_description.json')
     if not os.path.exists(sourcesDir):
       print("Creating swarm directory...")
       os.makedirs(sourcesDir)
@@ -51,17 +54,17 @@ class QSwarm(object):
 
   def __streamSourceFormat(self):
     if self._swarmType == swarmtype.ORD_AMOUNT:
-      return fileutil.swarmDescPath(self._businessDir, fileutil.ORDER_AMOUNT_FILE_NAME)
+      return fileutil.swarmDescPath(self._businessDir, self._swarmType, fileutil.ORDER_AMOUNT_FILE_NAME)
     else:
-      return "" # Todo any other swarm types.
+      return fileutil.swarmDescPath(self._businessDir, self._swarmType, fileutil.EXPECTED_EMPLOYEES_FILE_NAME)
 
 
   def start(self, name="unnamed"):
     """
-    Starts a new swarm.
-    @param swarmDir: (string) The directory for the swarm data.
-    @param name: (string) The name to call the swarm.
-    @param (object) The model parameters generated from the swarm.
+      Starts a new swarm.
+      @param swarmDir: (string) The directory for the swarm data.
+      @param name: (string) The name to call the swarm.
+      @param (object) The model parameters generated from the swarm.
     """
     self._swarmName = name
     return self.__swarm()
@@ -69,15 +72,25 @@ class QSwarm(object):
 
   def __writeModelParams(self, modelParams):
     """
-    Writes the model_params to directory.
-    @param modelParams: (dict) Model Parameters generated from swarm.
+      Writes the model_params to directory.
+      @param modelParams: (dict) Model Parameters generated from swarm.
     """
     swarmModelParamsFile = self._swarmName + "_model_params.py"
-    swarmModelParamsDir = os.path.join(
-      self._businessDir,
-      fileutil.SWARM_DIR_NAME,
-      swarmModelParamsFile
-    )
+    swarmModelParamsDir = ""
+    if self._swarmType == swarmtype.ORD_AMOUNT:
+      swarmModelParamsDir = os.path.join(
+        self._businessDir,
+        fileutil.SWARM_DIR_NAME,
+        "orderamount",
+        swarmModelParamsFile
+      )
+    elif self._swarmType == swarmtype.EXPECTED_EMPLOYEES:
+      swarmModelParamsDir = os.path.join(
+        self._businessDir,
+        fileutil.SWARM_DIR_NAME,
+        "employeesneeded",
+        swarmModelParamsFile
+      )
 
     if not os.path.isdir(swarmModelParamsDir):
       os.makedirs(swarmModelParamsDir)
@@ -97,7 +110,14 @@ class QSwarm(object):
     """
     Creates the swarm/ directory, which stores all generated files from the swarm
     """
-    swarmWorkDir = os.path.join(self._businessDir, fileutil.SWARM_DIR_NAME)
+    baseDir = os.path.join(self._businessDir, fileutil.SWARM_DIR_NAME)
+    if not os.path.exists(baseDir):
+      os.mkdir(baseDir)
+    swarmWorkDir = {}
+    if self._swarmType == swarmtype.ORD_AMOUNT:
+      swarmWorkDir = os.path.join(baseDir, "orderamount")
+    elif self._swarmType == swarmtype.EXPECTED_EMPLOYEES:
+      swarmWorkDir = os.path.join(baseDir, "employeesneeded")
     if not os.path.exists(swarmWorkDir):
       os.mkdir(swarmWorkDir)
       # Create __init__.py
@@ -128,8 +148,11 @@ class QSwarm(object):
     # Get the swarm desc Object for appropriate swarm.
     currentDir = os.path.dirname(os.path.abspath(__file__))
     swarmDescDir = os.path.join(currentDir, "swarm_desc_templates")
+    swarmDescFile = {}
     if swarmType == swarmtype.ORD_AMOUNT:
       swarmDescFile = os.path.join(swarmDescDir, "order_amount_template.json")
-      with open(swarmDescFile) as swarmDesc:
-        data = json.load(swarmDesc)
-        return data
+    elif swarmType == swarmtype.EXPECTED_EMPLOYEES:
+      swarmDescFile = os.path.join(swarmDescDir, "expected_employees_template.json")
+    with open(swarmDescFile) as swarmDesc:
+      data = json.load(swarmDesc)
+      return data

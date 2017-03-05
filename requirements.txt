@@ -5,6 +5,7 @@ cov-core==1.15.0
 coverage==3.7.1
 DBUtils==1.1
 execnet==1.4.1
+intervaltree==2.1.0
 mock==1.0.1
 numpy==1.11.2
 nupic==0.5.7
@@ -25,5 +26,6 @@ pytest-xdist==1.8
 python-dateutil==2.1
 PyYAML==3.10
 six==1.10.0
+sortedcontainers==1.5.7
 unittest2==0.5.1
 validictory==0.9.1
