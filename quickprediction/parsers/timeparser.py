@@ -165,9 +165,10 @@ def extractHourlyConflicts(orders, fromDate, toDate=datetime.today(), multitask=
       end=order["deadline"],
       data=order["id"]
     )
-  dates = getDaysInDateRange(start=fromDate, end=toDate)
+  toDate = datetime.today() + timedelta(days=1)
+  dateRange = getDaysInDateRange(fromDate, toDate)
   # now get conflicts for each hour
-  for date in dates:
+  for date in dateRange:
     conflictsForDate = {
       "date": date,
       "conflicts" : []
