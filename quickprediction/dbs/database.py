@@ -42,3 +42,4 @@ class Database(object):
       raise Database.InvalidConnectionError(
         "No connection established, please invoke connect() method."
       )
+

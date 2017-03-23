@@ -69,7 +69,7 @@ class QRunner(object):
       row = []
       for value in json.itervalues():
         row.append(value)
-      row.append(prediction)
+      row.append(int(prediction))
       if swarmType == swarmtype.ORD_AMOUNT:
         predictionData.append({
           "timestamp": row[0],
@@ -80,7 +80,7 @@ class QRunner(object):
       elif swarmType == swarmtype.EXPECTED_EMPLOYEES:
         predictionData.append({
           "timestamp": row[0],
-          "employeesNeeded": row[1],
+          "employeesNeeded": int(row[1]),
           "prediction": prediction,
         })
         output.write(row)

@@ -13,3 +13,6 @@ class OrderDB(Database):
     super(OrderDB, self).read()
     pipeline =  {"$and": [{"status": "processed"}, {"createdAt": {"$gte": fromDate}}] }
     return self._database.orders.find(pipeline).sort([("release", -1)])
+
+  def insert(self, order):
+    self._database.orders.insert(order);
