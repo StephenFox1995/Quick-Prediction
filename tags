@@ -4,6 +4,7 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
+Configuration	generatedata.py	/^from quickprediction.config.configuration import Configuration$/;"	kind:namespace	line:6
 Configuration	quickprediction/config/__init__.py	/^from .configuration import Configuration$/;"	kind:namespace	line:1
 Configuration	quickprediction/config/configuration.py	/^class Configuration(object):$/;"	kind:class	line:5
 Configuration	quickprediction/config/run.py	/^from .configuration import Configuration$/;"	kind:namespace	line:2
@@ -23,7 +24,9 @@ ModelFactory	quickprediction/prediction/qrunner.py	/^from nupic.frameworks.opf.m
 MongoClient	quickprediction/dbs/database.py	/^from pymongo import MongoClient$/;"	kind:namespace	line:1
 ORDER_AMOUNT_FILE_NAME	quickprediction/utils/fileutil.py	/^ORDER_AMOUNT_FILE_NAME = "orderAmountData.csv"$/;"	kind:variable	line:6
 ORD_AMOUNT	quickprediction/prediction/swarmtype.py	/^ORD_AMOUNT = "ORDERAMOUNT"$/;"	kind:variable	line:3
+ObjectId	generatedata.py	/^from bson.objectid import ObjectId$/;"	kind:namespace	line:7
 ObjectId	quickprediction/dbs/predictiondb.py	/^from bson.objectid import ObjectId$/;"	kind:namespace	line:2
+OrderDB	generatedata.py	/^from quickprediction.dbs.orderdb import OrderDB$/;"	kind:namespace	line:5
 OrderDB	quickprediction/dbs/orderdb.py	/^class OrderDB(Database):$/;"	kind:class	line:4
 OrderDB	run.py	/^from quickprediction.dbs.orderdb import OrderDB$/;"	kind:namespace	line:5
 Predict	quickprediction/prediction/predict.py	/^class Predict(object):$/;"	kind:class	line:10
@@ -74,16 +77,21 @@ __writeModelParams	quickprediction/prediction/qswarm.py	/^  def __writeModelPara
 addGoogleMapsKey	quickprediction/config/configuration.py	/^  def addGoogleMapsKey(self, key):$/;"	kind:member	line:112
 addMongoDatabase	quickprediction/config/configuration.py	/^  def addMongoDatabase(self, uri, port, database, username=None, password=None):$/;"	kind:member	line:54
 addTokenSecretKey	quickprediction/config/configuration.py	/^  def addTokenSecretKey(self, secret):$/;"	kind:member	line:131
+argparse	generatedata.py	/^import argparse$/;"	kind:namespace	line:2
 argparse	quickprediction/config/run.py	/^import argparse$/;"	kind:namespace	line:1
 argparse	run.py	/^import argparse$/;"	kind:namespace	line:1
+args	generatedata.py	/^	args = parser.parse_args()$/;"	kind:variable	line:18
 args	run.py	/^  args = args().parse_args()$/;"	kind:variable	line:50
 args	run.py	/^def args():$/;"	kind:function	line:15
 begin	quickprediction/prediction/predict.py	/^  def begin(self, data, **kwargs):$/;"	kind:member	line:29
+bulkop	generatedata.py	/^  bulkop = orderDB.bulkop$/;"	kind:variable	line:31
+bulkop	quickprediction/dbs/orderdb.py	/^  def bulkop(self):$/;"	kind:member	line:21
 businessid	run.py	/^  businessid = args.businessid$/;"	kind:variable	line:52
 ceil	quickprediction/parsers/timeparser.py	/^  from math import ceil$/;"	kind:namespace	line:133
 checkRoot	quickprediction/config/configuration.py	/^  def checkRoot():$/;"	kind:member	line:23
 close	quickprediction/dbs/database.py	/^  def close(self):$/;"	kind:member	line:30
 close	quickprediction/utils/qoutput.py	/^  def close(self):$/;"	kind:member	line:23
+config	generatedata.py	/^config = Configuration()$/;"	kind:variable	line:10
 config	run.py	/^  config = Configuration()$/;"	kind:variable	line:57
 configuration.py	quickprediction/config/configuration.py	1;"	kind:file	line:1
 conflictPath	quickprediction/utils/intervaltreeutil.py	/^def conflictPath(interval, intervalTree):$/;"	kind:function	line:16
@@ -94,11 +102,14 @@ csv	quickprediction/prediction/qrunner.py	/^import csv$/;"	kind:namespace	line:1
 csv	quickprediction/utils/qoutput.py	/^import csv$/;"	kind:namespace	line:1
 csvFilepath	quickprediction/prediction/predict.py	/^  def csvFilepath(self):$/;"	kind:member	line:22
 database.py	quickprediction/dbs/database.py	1;"	kind:file	line:1
+date	generatedata.py	/^    date = radar.random_datetime(start='2016-11-01', stop=datetime.now())$/;"	kind:variable	line:51
 dateRange	quickprediction/parsers/timeparser.py	/^  def dateRange(start, end, increment, period):$/;"	kind:function	line:65
+datetime	generatedata.py	/^from datetime import timedelta, datetime$/;"	kind:namespace	line:4
 datetime	quickprediction/parsers/hours.py	/^from datetime import datetime$/;"	kind:namespace	line:1
 datetime	quickprediction/parsers/rowextract.py	/^import datetime$/;"	kind:namespace	line:1
 datetime	quickprediction/parsers/timeparser.py	/^from datetime import datetime, timedelta$/;"	kind:namespace	line:1
 datetime	run.py	/^from datetime import datetime$/;"	kind:namespace	line:2
+dbDetails	generatedata.py	/^dbDetails = config.read([Configuration.DATABASES])[0][0]$/;"	kind:variable	line:11
 dbDetails	run.py	/^  dbDetails = config.read([Configuration.DATABASES])[0][0]$/;"	kind:variable	line:58
 deleteGoogleMapsKey	quickprediction/config/configuration.py	/^  def deleteGoogleMapsKey(self):$/;"	kind:member	line:122
 deleteMongoDatabase	quickprediction/config/configuration.py	/^  def deleteMongoDatabase(self, uri, port, database):$/;"	kind:member	line:78
@@ -118,6 +129,7 @@ filterHours	quickprediction/parsers/timeparser.py	/^  def filterHours(hourToComp
 findConflicts	quickprediction/parsers/timeparser.py	/^from quickprediction.utils.intervaltreeutil import findConflicts$/;"	kind:namespace	line:4
 findConflicts	quickprediction/utils/intervaltreeutil.py	/^def findConflicts(intervalTree, begin=None, end=None):$/;"	kind:function	line:57
 findLatestInterval	quickprediction/utils/intervaltreeutil.py	/^def findLatestInterval(intervals):$/;"	kind:function	line:3
+generatedata.py	generatedata.py	1;"	kind:file	line:1
 getArgs	quickprediction/config/run.py	/^def getArgs():$/;"	kind:function	line:5
 getDaysInDateRange	quickprediction/parsers/timeparser.py	/^def getDaysInDateRange(start, end):$/;"	kind:function	line:61
 getOrdersForDate	quickprediction/parsers/timeparser.py	/^def getOrdersForDate(date, orders):$/;"	kind:function	line:9
@@ -128,6 +140,7 @@ highestConflictsForHour	quickprediction/parsers/timeparser.py	/^def highestConfl
 hours	quickprediction/parsers/hours.py	/^hours = map(lambda hour: datetime.strptime(hour, "%H:%M"), [$/;"	kind:variable	line:4
 hours	quickprediction/parsers/timeparser.py	/^from .hours import hours$/;"	kind:namespace	line:5
 hours.py	quickprediction/parsers/hours.py	1;"	kind:file	line:1
+insert	quickprediction/dbs/orderdb.py	/^  def insert(self, order):$/;"	kind:member	line:17
 intervalConflictAlreadyDetected	quickprediction/utils/intervaltreeutil.py	/^def intervalConflictAlreadyDetected(interval, conflicts):$/;"	kind:function	line:46
 intervaltreeutil.py	quickprediction/utils/intervaltreeutil.py	1;"	kind:file	line:1
 json	quickprediction/config/configuration.py	/^import json$/;"	kind:namespace	line:2
@@ -140,7 +153,9 @@ monthRangeFrom	run.py	/^def monthRangeFrom(months=0):$/;"	kind:function	line:11
 monthsprior	run.py	/^  monthsprior = monthRangeFrom(args.monthsprior)$/;"	kind:variable	line:55
 multitask	run.py	/^  multitask = args.multitask$/;"	kind:variable	line:54
 orIntervals	quickprediction/utils/intervaltreeutil.py	/^def orIntervals(intervalListA, intervalListB):$/;"	kind:function	line:13
+order	generatedata.py	/^    order = {$/;"	kind:variable	line:34
 orderAmountRows	quickprediction/parsers/rowextract.py	/^def orderAmountRows(row):$/;"	kind:function	line:2
+orderDB	generatedata.py	/^  orderDB = OrderDB($/;"	kind:variable	line:22
 orderDB	run.py	/^  orderDB = OrderDB($/;"	kind:variable	line:60
 orderdb.py	quickprediction/dbs/orderdb.py	1;"	kind:file	line:1
 orders	run.py	/^  orders = orderDB.read(fromDate=monthsprior)$/;"	kind:variable	line:69
@@ -148,7 +163,9 @@ os	quickprediction/config/configuration.py	/^import os$/;"	kind:namespace	line:1
 os	quickprediction/prediction/predict.py	/^import os$/;"	kind:namespace	line:1
 os	quickprediction/prediction/qswarm.py	/^import os$/;"	kind:namespace	line:1
 os	quickprediction/utils/qoutput.py	/^import os$/;"	kind:namespace	line:2
+parser	generatedata.py	/^	parser = argparse.ArgumentParser()$/;"	kind:variable	line:14
 permutations_runner	quickprediction/prediction/qswarm.py	/^from nupic.swarming import permutations_runner$/;"	kind:namespace	line:4
+pprint	generatedata.py	/^from pprint import pprint$/;"	kind:namespace	line:3
 pprint	quickprediction/prediction/qswarm.py	/^import pprint$/;"	kind:namespace	line:2
 predict	run.py	/^  predict = Predict(businessid, swarmType, directory)$/;"	kind:variable	line:81
 predict.py	quickprediction/prediction/predict.py	1;"	kind:file	line:1
@@ -167,17 +184,20 @@ qswarm.py	quickprediction/prediction/qswarm.py	1;"	kind:file	line:1
 quickprediction	quickprediction/dbs/predictiondb.py	/^import quickprediction.prediction.swarmtype as swarmtype$/;"	kind:namespace	line:3
 quickprediction	quickprediction/prediction/qrunner.py	/^import quickprediction.prediction.swarmtype as swarmtype$/;"	kind:namespace	line:4
 quickprediction	quickprediction/utils/fileutil.py	/^import quickprediction.prediction.swarmtype as swarmType$/;"	kind:namespace	line:1
+radar	generatedata.py	/^import radar$/;"	kind:namespace	line:1
 read	quickprediction/config/configuration.py	/^  def read(self, prop):$/;"	kind:member	line:151
 read	quickprediction/dbs/database.py	/^  def read(self):$/;"	kind:member	line:36
 read	quickprediction/dbs/orderdb.py	/^  def read(self, fromDate):$/;"	kind:member	line:8
 relativedelta	quickprediction/parsers/timeparser.py	/^from dateutil.relativedelta import relativedelta$/;"	kind:namespace	line:2
 relativedelta	run.py	/^from dateutil.relativedelta import relativedelta$/;"	kind:namespace	line:4
+result	generatedata.py	/^  result = bulkop.execute()$/;"	kind:variable	line:61
 rowextract	quickprediction/prediction/predict.py	/^from quickprediction.parsers import rowextract$/;"	kind:namespace	line:4
 rowextract.py	quickprediction/parsers/rowextract.py	1;"	kind:file	line:1
 rows	run.py	/^  rows = predict.begin(predictData)$/;"	kind:variable	line:82
 run.py	quickprediction/config/run.py	1;"	kind:file	line:1
 run.py	run.py	1;"	kind:file	line:1
 runModel	quickprediction/prediction/qrunner.py	/^  def runModel(self, runName, inPath, swarmType, outDir, skiprows, func):$/;"	kind:member	line:25
+start	generatedata.py	/^	start = datetime.strptime(args.start, "dd-mm-yyyy")$/;"	kind:variable	line:19
 start	quickprediction/prediction/qswarm.py	/^  def start(self, name="unnamed"):$/;"	kind:member	line:62
 swarmDescPath	quickprediction/utils/fileutil.py	/^def swarmDescPath(directory, swarmtype, filename):$/;"	kind:function	line:13
 swarmType	quickprediction/utils/fileutil.py	/^import quickprediction.prediction.swarmtype as swarmType$/;"	kind:namespace	line:1
@@ -188,6 +208,7 @@ swarmtype	quickprediction/prediction/qrunner.py	/^import quickprediction.predict
 swarmtype	quickprediction/prediction/qswarm.py	/^from . import swarmtype$/;"	kind:namespace	line:6
 swarmtype	run.py	/^from quickprediction.prediction import swarmtype$/;"	kind:namespace	line:3
 swarmtype.py	quickprediction/prediction/swarmtype.py	1;"	kind:file	line:1
+timedelta	generatedata.py	/^from datetime import timedelta, datetime$/;"	kind:namespace	line:4
 timedelta	quickprediction/parsers/timeparser.py	/^from datetime import datetime, timedelta$/;"	kind:namespace	line:1
 timeparser.py	quickprediction/parsers/timeparser.py	1;"	kind:file	line:1
 workersNeeded	quickprediction/parsers/timeparser.py	/^def workersNeeded(k, m):$/;"	kind:function	line:126

@@ -16,3 +16,7 @@ class OrderDB(Database):
 
   def insert(self, order):
     self._database.orders.insert(order);
+
+  @property
+  def bulkop(self):
+    return self._database.orders.initialize_ordered_bulk_op()

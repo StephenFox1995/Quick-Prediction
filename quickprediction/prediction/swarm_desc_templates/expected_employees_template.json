@@ -52,5 +52,5 @@
     "predictedField": "employeesNeeded"
   },
   "iterationCount": -1,
-  "swarmSize": "small"
+  "swarmSize": "medium"
 }
