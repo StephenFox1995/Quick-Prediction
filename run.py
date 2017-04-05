@@ -9,7 +9,7 @@ from quickprediction.config import Configuration
 from quickprediction.parsers.timeparser import *
 
 def monthRangeFrom(months=0):
-  return datetime.today() + relativedelta(months=months)
+  return datetime.now() + relativedelta(months=months)
 
 
 def args():
